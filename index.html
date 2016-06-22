@@ -1,20 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
 
     <title>EBI template</title>
 
-    <link rel="stylesheet" href="css/reset.css" />
-    <link rel="stylesheet" href="css/reveal.css" />
-    <link rel="stylesheet" href="css/theme/ebi.css" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
 
-    <!-- Theme used for syntax highlighting of code -->
-    <link rel="stylesheet" href="lib/css/monokai.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"
+    />
+
+    <link rel="stylesheet" href="css/reveal.css" />
+    <link rel="stylesheet" href="css/theme/ebi.css" id="theme" />
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css" />
 
     <!-- Printing and PDF exports -->
     <script>
@@ -40,10 +46,10 @@
           <h1>EMBL-EBI</h1>
           <p>
             Adapting the EMBL-EBI slide template to
-            <a href="https://revealjs.com/#/">reveal.js</a>
+            <a href="http://lab.hakim.se/reveal-js/#/">reveal.js</a>
           </p>
           <img
-            src="css/theme/ebi/EBI_logo.jpg"
+            src="css/theme/ebi/EBI_logo.png"
             style="border: 0; padding:5px;"
           />
         </section>
@@ -65,7 +71,7 @@
             </p>
           </section>
           <section
-            data-background="css/theme/ebi/bg_hearth_red.png"
+            data-background="css/theme/ebi/bg_heart_red.png"
             class="ebi-bg"
           >
             <h2>EBI background Slides</h2>
@@ -94,8 +100,8 @@
                 - <a href="css/theme/ebi/bg_gears.png">bg_gears.png</a><br />
               </div>
               <div style="width:49%;">
-                - <a href="css/theme/ebi/bg_hearth.png">bg_hearth.png</a><br />
-                - <a href="css/theme/ebi/bg_hearth_red.png">bg_hearth_red.png</a
+                - <a href="css/theme/ebi/bg_heart.png">bg_heart.png</a><br />
+                - <a href="css/theme/ebi/bg_heart_red.png">bg_heart_red.png</a
                 ><br />
                 - <a href="css/theme/ebi/bg_microbes.png">bg_microbes.png</a
                 ><br />
@@ -123,19 +129,48 @@
     </div>
 
     <script src="lib/js/head.min.js"></script>
-
     <script src="js/reveal.js"></script>
 
     <script>
-      // More info about config & dependencies:
-      // - https://github.com/hakimel/reveal.js#configuration
-      // - https://github.com/hakimel/reveal.js#dependencies
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: false,
+
+        transition: "slide", // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
         dependencies: [
-          { src: "plugin/markdown/marked.js" },
-          { src: "plugin/markdown/markdown.js" },
-          { src: "plugin/notes/notes.js", async: true },
-          { src: "plugin/highlight/highlight.js", async: true }
+          {
+            src: "lib/js/classList.js",
+            condition: function() {
+              return !document.body.classList;
+            }
+          },
+          {
+            src: "plugin/markdown/marked.js",
+            condition: function() {
+              return !!document.querySelector("[data-markdown]");
+            }
+          },
+          {
+            src: "plugin/markdown/markdown.js",
+            condition: function() {
+              return !!document.querySelector("[data-markdown]");
+            }
+          },
+          {
+            src: "plugin/highlight/highlight.js",
+            async: true,
+            callback: function() {
+              hljs.initHighlightingOnLoad();
+            }
+          },
+          { src: "plugin/zoom-js/zoom.js", async: true },
+          { src: "plugin/notes/notes.js", async: true }
         ]
       });
     </script>
