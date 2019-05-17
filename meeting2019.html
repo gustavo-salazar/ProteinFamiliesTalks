@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>InterPro 2019 - Under the hood</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"
+    />
+
+    <link rel="stylesheet" href="css/reveal.css" />
+    <link rel="stylesheet" href="css/theme/ebi.css" id="theme" />
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css" />
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.type = "text/css";
+      link.href = window.location.search.match(/print-pdf/gi)
+        ? "css/print/pdf.css"
+        : "css/print/paper.css";
+      document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
+
+    <!--[if lt IE 9]> <script src="lib/js/html5shiv.js"></script> <![endif]-->
+    <style type="text/css">
+      .reveal section img {
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+      img.opening-logo {
+        width: 25vw;
+        position: absolute;
+        top: 50vh;
+        left: 60vw;
+      }
+      .reveal h1,
+      .reveal h2,
+      .reveal h3,
+      .reveal h4,
+      .reveal h5 {
+        text-transform: capitalize;
+      }
+      .reveal h1 a,
+      .reveal h2 a,
+      .reveal h3 a,
+      .reveal h4 a,
+      .reveal h5 a {
+        text-transform: lowercase;
+      }
+      .flowline {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content:space-between;
+        align-items:center;
+      }
+      .fullslide {
+        height: 60vh;
+      }
+      .half {
+        height: 30vh;
+      }
+      .third {
+        height: 20vh;
+        font-size: 0.9em;
+      }
+      .fourth {
+        height: 16vh;
+        font-size: 0.8em;
+      }
+      .fifth {
+        height: 12vh;
+        font-size: 0.8em;
+      }
+      .reveal section img.icon {
+        height: 0.6em;
+        margin: 0;
+        padding-bottom: 0.1em;
+      }
+      .box {
+        display: inline-block;
+        text-align: center;
+      }
+      .centered {
+        width: 100%;
+        text-align: center;
+      }
+      div.box img{
+        margin: 0;
+      }
+      div.box footer{
+        line-height: 0.3;
+        margin-bottom: 1em;
+      }
+      ul {
+        font-size: 0.9em;
+        width: 100%;
+      }
+      ul {
+        font-size: 0.8em;
+      }
+      .photos {
+        margin-top: 1em;
+      }
+      div.box img.photo {
+        border: 2px solid red;
+        border-radius: 50%;
+        width: 5vh;
+        margin: 3px;
+      }
+      .over-demo {
+        position: absolute;
+        width: 40%;
+        right: 0;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2);
+        background-color: rgba(0, 0, 0, 0.9);
+        color: #fff;
+        padding: 20px;
+        font-size: 20px;
+        text-align: left;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-background="css/theme/ebi/bg_atoms.png" class="ebi-bg">
+          <h2>InterPro <i>(Under the hood)</i></h2>
+          <p>What I know about it</p>
+          <img src="./img/logo_lightblue.svg" class="opening-logo" />
+        </section>
+        <section
+          data-background-iframe="https://www.ebi.ac.uk/interpro/beta/"
+          data-background-interactive
+        >
+          <div class="over-demo">
+            <h2>Killer App</h2>
+            <p>InterPro is one of the most used EBI services.</p>
+            <p>It lets you know whats going on with your protein</p>
+          </div>
+        </section>
+        <section>
+          <h3>So basically....</h3>
+
+          <div class="flowline third">
+            <img src="./img/user.png"/>
+            <img src="./img/arrow.png"style="height: 25%;"/>
+            <div class="box third">
+              <img src="./img/box.png"/>
+              <footer>
+                <span>InterPro</span><br/>
+              </footer>
+            </div>
+            <img src="./img/arrow.png"style="height: 25%;"/>
+            <img src="./img/iproscanresult.png"/>
+          </div>
+          <br/><br/>
+          <div class="fragment">
+            <h4>Simplest Case</h4>
+            <div class="flowline fifth">
+              <span>Protein Sequence</span>
+              <img src="./img/arrow.png"style="height: 25%;"/>
+              <span>InterProScan</span>
+              <img src="./img/arrow.png"style="height: 25%;"/>
+              <span>Matches + Metadata</span>
+            </div>
+          </div>
+        </section>
+        <section data-background="./img/whats-in-the-box.jpeg" class="ebi-bg">
+          <h2>InterPro</h2>
+        </section>
+        <section>
+          <h2>InterPro and its member DBs.</h2>
+          <div class="fullslide"><img src="./img/memberDBs.png" /></div>
+        </section>
+        <section>
+          <h2>Other sources</h2>
+          <div class="box fourth centered">
+            <img src="./img/uniprot.svg"><br/>
+            <img src="./img/pdb.png"><br/>
+            <img src="./img/go-logo.png"><br/>
+          </div>
+        </section>
+        <section>
+          <h2><img src="./img/box.png" class="icon"/> InterProScan</h2>
+          <section>
+            <p>Requirement to analize a protein sequence</p>
+            <div class="fragment">
+              <header>For each MemberDB:</header>
+              <ul>
+                <li><img src="./img/db.png" class="icon"/> Signatures</li>
+                <li><img src="./img/docs.png" class="icon"/> Metadata</li>
+                <li><img src="./img/scanner.png" class="icon"/> Analizer</li>
+              </ul>
+            </div>
+            <div class="fragment">
+              <header>From InterPro:</header>
+              <ul>
+                <li><img src="./img/db.png" class="icon"/> Integration</li>
+                <li><img src="./img/db.png" class="icon"/> Extra data. e.g. InterPro2GO, pathways</li>
+              </ul>
+            </div>
+          </section>
+          <section>
+            <div class="fullslide">
+              <img src="./img/interproscan_flow.png" />
+            </div>
+          </section>
+          <section>
+            <p>The software:</p>
+            <ul>
+              <li class="fragment">Current version: InterProScan 5.35-74.0</li>
+              <li class="fragment">Requirements:
+                <ul>
+                  <li>64-bit Linux</li>
+                  <li>Perl 5 (default on most Linux distributions)</li>
+                  <li>Python 3 (InterProScan 5.30-69.0 onwards)</li>
+                  <li>Oracle's Java JDK/JRE version 8 (InterProScan 5.17-56.0 onwards)</li>
+                </ul>
+              </li>
+              <li class="fragment">Supports master/worker parallelisation mode</li>
+              <li class="fragment">Web Production runs InterProScan as a web service</li>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <h3>InterPro High level view</h3>
+          <div class="flowline centered third">
+            <div class="box third">
+              <img src="./img/box.png"/>
+              <footer>
+                Production
+                <div class="photos fragment">
+                  <img src="./img/team/simon.jpg" class="photo"/>
+                  <img src="./img/team/gift.jpg" class="photo"/><br/>
+                  <img src="./img/team/matt.jpg" class="photo"/>
+                  <img src="./img/team/blum.jpg" class="photo"/>
+                </div>
+              </footer>
+            </div>
+            <img src="./img/arrow.png"style="height: 25%;"/>
+            <div class="box third">
+              <img src="./img/box.png"/>
+              <footer>
+                Curation
+                <div class="photos fragment">
+                  <img src="./img/team/alex.jpg" class="photo"/>
+                  <img src="./img/team/hsin_yu.jpg" class="photo"/><br/>
+                  <img src="./img/team/lorna.jpg" class="photo"/>
+                  <img src="./img/team/typhaine.jpg" class="photo"/>
+                </div>
+              </footer>
+            </div>
+            <img src="./img/arrow.png"style="height: 25%;"/>
+            <div class="box third">
+              <img src="./img/box.png"/>
+              <footer>
+                Data Warehouse
+                <div class="photos fragment">
+                  <img src="./img/team/simon.jpg" class="photo"/>
+                  <img src="./img/team/blum.jpg" class="photo"/>
+                  <img src="./img/team/gift.jpg" class="photo"/>
+                  <img src="./img/team/matt.jpg" class="photo"/><br/>
+                  <img src="./img/team/matloob.jpg" class="photo"/>
+                  <img src="./img/team/gustavo.jpg" class="photo"/>
+                  <img src="./img/team/swaathi.png" class="photo"/>
+
+                </div>
+              </footer>
+            </div>
+            <img src="./img/arrow.png"style="height: 25%;"/>
+            <div class="box third">
+              <img src="./img/box.png"/>
+              <footer>
+                Website
+                <div class="photos fragment">
+                  <img src="./img/team/matloob.jpg" class="photo"/>
+                  <img src="./img/team/gustavo.jpg" class="photo"/><br/>
+                  <img src="./img/team/swaathi.png" class="photo"/>
+                </div>
+              </footer>
+            </div>
+          </div>
+          <br/><br/>
+        </section>
+        <section data-background="https://media.giphy.com/media/vG1Dgq3JRXLMc/giphy.gif" class="ebi-bg">
+          <h2>Let's open this boxes</h2>
+        </section>
+        <section>
+          <h3>
+            <img src="./img/box.png" class="icon"/>
+            Production &
+            <img src="./img/box.png" class="icon"/>
+            Curation
+          </h3>
+          <div class="flowline third">
+            <div class="box fourth">
+              <img src="./img/box.png"/>
+              <footer>Data Updates</footer>
+            </div>
+            <img src="./img/arrow.png"style="height: 25%;"/>
+            <div class="box fourth">
+              <img src="./img/db.png"/>
+              <footer>Production</footer>
+            </div>
+            <img src="./img/arrow.png"style="height: 25%;"/>
+            <div class="box fourth">
+              <img src="./img/user.png"/>
+              <footer>Curators</footer>
+            </div>
+            <img src="./img/arrow.png"style="height: 25%;"/>
+            <div class="box fourth">
+              <img src="./img/db.png"/>
+              <footer>Production</footer>
+            </div>
+          </div>
+        </section>
+        <section>
+          <h2><img src="./img/box.png" class="icon"/> Data Updates</h2>
+          <section>
+            <h5>Protein update</h5>
+            <div class="fifth">
+              <div class="box fifth">
+                <img src="./img/db.png"/>
+                <footer>Uniprot</footer>
+              </div>
+              <img src="./img/arrow.png"style="height: 25%;"/>
+              <div class="box fifth">
+                <img src="./img/gears.png"/>
+              </div>
+              <img src="./img/arrow.png"style="height: 25%;"/>
+              <div class="box fifth">
+                <img src="./img/db.png"/>
+                <footer>Production</footer>
+              </div>
+            </div>
+            <br/>
+            <br/>
+            <ul>
+              <li>Once a month</li>
+              <li>+1M new proteins per month</li>
+              <li>We process a release 1 version ahead of public UniProt</li>
+            </ul>
+          </section>
+          <section>
+            <div class="fullslide">
+              <img src="./img/ProteinUpdate.png" />
+            </div>
+          </section>
+          <section>
+            <h5>Member DB update</h5>
+            <div class="fifth">
+              <div class="box fifth">
+                <img src="./img/db.png"/>
+                <footer>MemberDB</footer>
+              </div>
+              <img src="./img/arrow.png"style="height: 25%;"/>
+              <div class="box fifth">
+                <img src="./img/gears.png"/>
+              </div>
+              <img src="./img/arrow.png"style="height: 25%;"/>
+              <div class="box fifth">
+                <img src="./img/db.png"/>
+                <footer>Production</footer>
+              </div>
+            </div>
+            <br/>
+            <br/>
+            <ul>
+              <li>~1 per InterPro release</li>
+              <li>Each Member DB has a specific procedure </li>
+              <li>Changes vary from release to release</li>
+            </ul>
+          </section>
+          <section>
+            <div class="fullslide">
+              <img src="./img/MemberDBUpdate.png"/>
+            </div>
+          </section>
+        </section>
+        <section>
+          <h2><img src="./img/box.png" class="icon"/>InterPro Curation</h2>
+          <section>
+            <h5>Member DB Update Curation</h5>
+            <div class="fifth">
+              <div class="box fifth">
+                <img src="./img/db.png"/>
+                <footer>Production</footer>
+              </div>
+              <img src="./img/arrow.png"style="height: 25%;"/>
+              <div class="box fourth">
+                <img src="./img/user.png"/>
+              </div>
+              <img src="./img/arrow.png"style="height: 25%;"/>
+              <div class="box fifth">
+                <img src="./img/db.png"/>
+                <footer>Production</footer>
+              </div>
+            </div>
+            <br/><br/>
+            Curators review the data looking for:
+            <ul>
+              <li class="fragment">
+                Entries with inconsistencies (e.g. lost/won SwissProt)
+              </li>
+              <li class="fragment">New signatures that can be integrated</li>
+              <li class="fragment">Removed signatures</li>
+            </ul>
+          </section>
+          <section>
+            <div class="fullslide">
+              <img src="./img/CurationProcess.png"/>
+            </div>
+          </section>
+        </section>
+        <section data-background="https://media.giphy.com/media/9YcAW5YlQB5gk/giphy.gif" class="ebi-bg">
+          <h2>Production DB freezes </h2>
+        </section>
+        <section>
+          <h2><img src="./img/box.png" class="icon"/>Data Warehouse</h2>
+          <section>
+            <h5>Release Procedure</h5>
+            <div class="fullslide">
+              <img src="./img/Release.png" />
+            </div>
+          </section>
+          <section>
+            <h5>Release Procedure</h5>
+            <ul>
+              <li>The procedure takes around 3-4 days</li>
+              <li>Requires some legacy procedure from InterPro6 (1.5 days)</li>
+              <li>Runs on the EBI cluster - Easy to migrate</li>
+              <li>It is controlled with a python App.
+                <ul>
+                  <li>It can runs all the steps at once.</li>
+                  <li>It can run selected parts</li>
+                </ul>
+              </li>
+              <li>Some numbers for InterPro 74.0:
+                <ul>
+                  <li>Proteins in MySQL: 155M</li>
+                  <li>Documents in ElasticSearch: 1.4B</li>
+                  <li>Ebi-search: 300K entries and 3.2B X-references</li>
+                </ul>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <div>
+              <div class="fullslide">
+                <img src="./img/InterProAPI.png" />
+              </div>
+              <h3><a href="https://www.ebi.ac.uk/interpro/beta/api/">https://www.ebi.ac.uk/interpro/beta/api/</a>
+              </h3>
+            </div>
+          </section>
+          <section>
+            <h5><img src="./img/server.svg" class="icon"/>InterPro7 API</h5>
+
+            <div style="display:flex">
+              <ul style="width:60%">
+              <li>Django Stack
+                <ul>
+                  <li>Python3</li>
+                  <li>Django</li>
+                  <li>Django Rest Framework</li>
+                </ul>
+              </li>
+              <li>Supprts 6 main endpoints:
+                <ul>
+                  <li>Entry</li>
+                  <li>Protein</li>
+                  <li>Structure</li>
+                  <li>Taxonomy</li>
+                  <li>Proteome</li>
+                  <li>Sets</li>
+                </ul>
+              </li>
+              <li>Preloading the cache takes about 2 days</li>
+              <li>Deployed on test, staging and live machines.</li>
+            </ul>
+            <div style="display:flex; flex-direction:column">
+              <img src="./img/python-logo.png" style="width:30vh"/>
+              <img src="./img/django-logo.png" style="width:30vh"/>
+              <img src="./img/drf-logo.png" style="width:30vh"/>
+            </div>
+          </div>
+          </section>
+        </section>
+        <section>
+          <h2><img src="./img/box.png" class="icon"/> Website</h2>
+          <section>
+            <div style="display:flex">
+              <ul style="width:60%">
+                <li>Single Page Application</li>
+                <li>JavaScript Stack
+                  <ul>
+                    <li>ES2015+</li>
+                    <li>React</li>
+                    <li>Redux</li>
+                  </ul>
+                </li>
+                <li>In-house dependencies:
+                  <ul>
+                    <li>ClanViewer</li>
+                    <li>Nightingale - ProtVista</li>
+                    <li>InterPro-Components</li>
+                    <li>Taxonomy Visualization</li>
+                  </ul>
+                </li>
+                <li>Dev stack:
+                  <ul>
+                    <li>Webpack</li>
+                    <li>Babel</li>
+                    <li>Testing: Eslint, Flow, Jest, Puppeteer</li>
+                    <li>Reports: Coverage, Lighthouse</li>
+                  </ul>
+                </li>
+              </ul>
+              <div>
+                <img src="./img/js_logos.png"/>
+              </div>
+            </div>
+          </section>
+        </section>
+        <section
+          data-background-iframe="https://www.ebi.ac.uk/interpro/beta/"
+          data-background-interactive
+        >
+        </section>
+        <section data-background="https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif" class="ebi-bg">
+          <h2>Thanks!!!</h2>
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: false,
+        controlsLayout: 'edges',
+
+        transition: "convex", // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+          {
+            src: "lib/js/classList.js",
+            condition: function() {
+              return !document.body.classList;
+            }
+          },
+          {
+            src: "plugin/markdown/marked.js",
+            condition: function() {
+              return !!document.querySelector("[data-markdown]");
+            }
+          },
+          {
+            src: "plugin/markdown/markdown.js",
+            condition: function() {
+              return !!document.querySelector("[data-markdown]");
+            }
+          },
+          {
+            src: "plugin/highlight/highlight.js",
+            async: true,
+            callback: function() {
+              hljs.initHighlightingOnLoad();
+            }
+          },
+          { src: "plugin/zoom-js/zoom.js", async: true },
+          { src: "plugin/notes/notes.js", async: true }
+        ]
+      });
+    </script>
+  </body>
+</html>
