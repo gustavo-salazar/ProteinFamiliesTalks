@@ -1,50 +1,57 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
 
-		<title>reveal.js</title>
+    <title>reveal.js</title>
 
-		<link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/reveal.css" />
     <link rel="stylesheet" href="css/theme/ebi.css" id="theme" />
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css" />
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.type = "text/css";
+      link.href = window.location.search.match(/print-pdf/gi)
+        ? "css/print/pdf.css"
+        : "css/print/paper.css";
+      document.getElementsByTagName("head")[0].appendChild(link);
     </script>
     <style>
-      div.react2020 h3 {
+      div.react2020 h3, div.react2020 h2 {
         text-transform: none;
       }
     </style>
-	</head>
-	<body>
-		<div class="reveal react2020">
-			<div class="slides">
-				<section data-markdown  data-background="css/theme/ebi/bg_atoms.png" class="ebi-bg">
-					## React Hooks and other perks.
-					Gustavo A. Salazar
-
+  </head>
+  <body>
+    <div class="reveal react2020">
+      <div class="slides">
+        <section
+          data-markdown
+          data-background="css/theme/ebi/bg_atoms.png"
+          class="ebi-bg"
+        >
+          ## React Hooks and other perks. 
+          
+          _Gustavo A. Salazar_
         </section>
         <section data-markdown>
-          ## Creating a React App
-          
-          Simplest way: `create-react-app`
-```bash
-npx create-react-app lyrics-demo 
-cd lyrics-demo
-npm start
-```
-After creation, your project should look like this:
-```yml
+          ## Creating a React App Simplest way: `create-react-app` 
+          ```bash
+          npx create-react-app lyrics-demo
+          cd lyrics-demo
+          npm start 
+          ``` 
+          After creation, your project should look like this: 
+          ```yml 
 my-app/
   README.md
   node_modules/
@@ -59,118 +66,111 @@ my-app/
     index.css
     index.js
     logo.svg
-```
+          ```
         </section>
 
         <section data-markdown>
-          ## Creating a React App
-          Language Features:
-          * Exponentiation Operator (ES2016).
+          ## Creating a React App Language Features: 
+          * Exponentiation Operator (ES2016). 
           * Async/await (ES2017).
           * Object Rest/Spread Properties (ES2018).
-          * Dynamic import() (stage 4 proposal)
+          * Dynamic import() (stage 4 proposal) 
           * Class Fields and Static Properties (part of stage 3 proposal).
           * JSX, Flow and TypeScript.
         </section>
         <section data-markdown>
-          ## Creating a React App
+          ## Creating a React App 
           Included Libraries:
-          * Webpack
-          * Babel
-          * Eslint
-          * Jest
-          * workbox-webpack-plugin
+           * Webpack
+           * Babel 
+           * Eslint
+           * Jest 
+           * workbox-webpack-plugin
         </section>
         <section data-markdown>
           ## Lyrics Demo
+           * We are going to build an app that let you select an artist. 
+           * It will display the available songs. 
+           * If the user selects one song, the app will display the lyrics. 
+           
 
-          * We are going to build an app that let you select an artist.
-          * It will display the available songs.
-          * If the user selects one song, the app will display the lyrics.
-
-          *Challenge* Do it with just functional components
+           **Challenge** Do it with just functional components
         </section>
-        <section data-background="https://media.giphy.com/media/d4zHnLjdy48Cc/giphy.gif" class="ebi-bg">
-        </section>
+        <section
+          data-background="https://media.giphy.com/media/d4zHnLjdy48Cc/giphy.gif"
+          class="ebi-bg"
+        ></section>
 
         <section data-markdown>
           ## Lyrics Demo
-          This is the wireframe:
+          This is the wireframe: 
           ![Image of the App Sketch](img/react2020/sketch.jpg)
-				</section>
+        </section>
         <section data-markdown>
           ## Lyrics Demo
           That wireframe in react should look like:
           ### `App.js`
-
 ```javascript
-import React from 'react';
+import React from 'react'; 
 import './App.css';
-
 const App = () => {
-  return (
-    &lt;div>
-      &lt;h1>Lyrics Demo&lt;/h1>
+  return ( 
+    &lt;div> 
+      &lt;h1>Lyrics Demo&lt;/h1> 
       &lt;header>
-        &lt;ArtistSelector />
-        &lt;SongList />
-      &lt;/header>
+        &lt;ArtistSelector /> 
+        &lt;SongList /> 
+      &lt;/header> 
       &lt;Lyrics />
-    &lt;/div>
+    &lt;/div> 
   );
-}
+} 
 const ArtistSelector = () => &lt;div>ArtistSelector&lt;/div>;
-const SongList = () => &lt;div>SongList&lt;/div>;
-const Lyrics = () => &lt;div>Lyrics&lt;/div>;
+const SongList = () => &lt;div>SongList&lt;/div>; 
+const Lyrics = () => &lt;div>Lyrics&lt;/div>; 
 
-export default App;
-
+export default App; 
 ```
         </section>
         <section data-markdown>
-          ## Lyrics Demo
-          And let's make it look a bit better:
+          ## Lyrics Demo 
+          And let's make it look a bit better: 
           ### `App.css`
-```css
-.lyrics-demo {
-  color: gray;
-}
-.lyrics-demo > h1 {
+```css 
+.lyrics-demo { color: gray; } 
+.lyrics-demo > h1 { 
   width: 100%;
-  text-align: center;
-  color: cornflowerblue;
-}
+  text-align: center; 
+  color: cornflowerblue; 
+} 
 .lyrics-demo > header {
-  display: flex;
-  justify-content: space-between;
-  padding: 1em;
-}
+  display: flex; 
+  justify-content: space-between; 
+  padding: 1em; 
+} 
 ```
         </section>
         <section data-markdown>
-          ## Lyrics Demo
+          ## Lyrics Demo 
           So let's extract the first component out of the App.
-          ### `ArtistSelector.js`
-
+          ### `ArtistSelector.js` 
 ```javascript
 import React from 'react';
-
-const ArtistSelector = ({ artists = [] }) => (
-  &lt;select>
-    {artists.map(artist => (
+const ArtistSelector = ({ artists = [], onChange }) => ( 
+  &lt;select onChange={onChange}>
+    {artists.map(artist => ( 
       &lt;option key={artist}>{artist}&lt;/option>
-    ))}
-  &lt;/select>
-);
-
-export default ArtistSelector;
+    ))} 
+  &lt;/select> 
+); 
+export default ArtistSelector; 
 ```
-        </section>   
+        </section>
         <section data-markdown>
           ## Lyrics Demo
-          Here is some data
-          ### `songsByArtists.json`
-```json
+          Here is some data 
+          ### `songsByArtists.json` 
+```json  
 {
   "Amy Winehouse": ["Rehab", "Back to Black", "You know I'm not good"],
   "Queen": ["Bicycle race", "Bohemian Rhapsody", "flash"],
@@ -184,76 +184,265 @@ export default ArtistSelector;
   "The National": ["Runaway", "Nobody Else Will Be There", "mr november"]
 }
 ```
-				</section>
+        </section>
         <section data-markdown>
           ## Lyrics Demo
-          And using it in the App:
-          ### `App.js`
+          And using it in the App: 
+          ### `App.js` 
+```javascript
+import React from 'react'; 
+import './App.css'; 
+import ArtistSelector from "./ArtistSelector"; 
+import localData from "./songsByArtists.json"; 
+
+const App = () => { 
+  return ( 
+    &lt;div className="lyrics-demo"> 
+      &lt;h1>Lyrics Demo&lt;/h1> 
+      &lt;header>
+        &lt;ArtistSelector artists={Object.keys(localData)}/> 
+        &lt;SongList />
+      &lt;/header> 
+      &lt;Lyrics /> 
+    &lt;/div> 
+  ); 
+} 
+
+const SongList = () => &lt;div>SongList&lt;/div>; 
+const Lyrics = () => &lt;div>Lyrics&lt;/div>;
+
+export default App; 
+```
+        </section>
+        <section>
+          <h2>Lyrics Demo</h2>
+          <ul>
+            <li class="fragment">
+              Where are we going to store the selected artist?
+            </li>
+            <li
+              class="fragment quote"
+              style="font-style: italic; color:darkslateblue"
+            >
+              Is react, save it in the state
+            </li>
+            <li class="fragment">
+              <div style="display:flex;"> 
+                But we are only using functional components!, remember?
+                <img style="border:0;" src="img/react2020/barney.png" />
+              </div>
+            </li>
+            <h2 class="fragment" style="font-style: italic; color:darkslateblue">Enter React Hooks</h2> 
+          </ul>
+        </section>
+        <section data-markdown>
+          ## But First - React: Lifecycle
+
+          ![Image of the the React Lifecycle](img/react2020/react_lifecycle.jpg)
+          *@dan_abramov*
+        </section>
+        <section data-markdown>
+          ## React Hooks
+
+          Hooks are *JavaScript functions* that lets you “hook into” React features.
+
+          You need to follow two rules when using them:
+          * Only Call Hooks at the Top Level
+          * Only Call Hooks from React Functions
+        </section>
+        <section data-markdown>
+          ## React Hooks: _useState_
+
+          `useState` is a Hook that lets you add React state to function components.
 
 ```javascript
-import React from 'react';
-import './App.css';
-import ArtistSelector from "./ArtistSelector";
-import localData from "./songsByArtists.json";
+import React, { useState } from 'react';
 
+function Example() {
+  // Declare a new state variable, which we'll call "count"
+  const [count, setCount] = useState(0);
+
+  return (
+    &lt;div>
+      &lt;p>You clicked {count} times&lt;/p>
+      &lt;button onClick={() => setCount(count + 1)}>
+        Click me
+      &lt;/button>
+    &lt;/div>
+  );
+}
+```
+        </section>
+        <section data-markdown>
+          ## Lyrics Demo 
+          So let's hook our App with some state.
+          ### `App.js` 
+```javascript
+import React, { useState } from "react";
+//...
 const App = () => {
+  const [artist, setArtist] = useState(null);
+  const handleChange = evt => setArtist(evt.target.value);
   return (
     &lt;div className="lyrics-demo">
       &lt;h1>Lyrics Demo&lt;/h1>
       &lt;header>
-        &lt;ArtistSelector artists={Object.keys(localData)}/>
-        &lt;SongList />
+        &lt;ArtistSelector artists={Object.keys(localData)}
+          onChange={handleChange}
+        />
+        &lt;SongList/>
       &lt;/header>
       &lt;Lyrics />
     &lt;/div>
   );
-}
-
-const SongList = () => &lt;div>SongList&lt;/div>;
-const Lyrics = () => &lt;div>Lyrics&lt;/div>;
-
-export default App;
-
+};
+const Lyrics = ({artist ='', song=''}) => &lt;h4>{song} by {artist}&lt;/h4>;
+// ...
 ```
         </section>
         <section data-markdown>
-          ## Lyrics Demo
-          * Where are we going to store the selected artist? <!-- .element: class="fragment" -->
+          ## React Context
+          Context provides a way to share values without having to explicitly pass a prop through every level of the tree.
 
-          * _Is react, save it in the state_ <!-- .element: class="fragment" -->
+          **Apply it sparingly because it makes component reuse more difficult.**
 
-          But we are only using functional components!, remember? 
-          ![Image of HIMYM](img/react2020/barney.png)
-
-          **Enter React Hooks**
+          Basicallly, 
+          * A parent component **creates** a context. 
+          * A parent component (could be the same), **provides** values for such context.
+          * A child component **consumes** the context, and gets the values given by the closes matching Provider.
         </section>
         <section data-markdown>
-          Thanks! 👍🏼
-          ===
+          ## Lyrics Demo 
+          First. We create the context in a separate module so it can be used in multiple parts
+
+          ### `LyricsContext.js` 
+```javascript
+import React from "react";
+
+export const LyricsContext = React.createContext({
+  artist: '',
+  song: '',
+});
+```
         </section>
-			</div>
-		</div>
+        <section data-markdown>
+          ## React Context
+          Now we can set the App component to be a Context provider.
+```javascript
+import {LyricsContext} from "./LyricsContext";
+import Lyrics from "./Lyrics";
+// ...
+const App = () => {
+  // ...
+  return (
+    &lt;LyricsContext.Provider value={{artist}}>
+      &lt;div className="lyrics-demo">
+      // ...
+      &lt;/div>
+    &lt;/LyricsContext.Provider>
+  );
+};
+```
+        </section>
+        <section data-markdown>
+          ## React Context
+          And the Lyrics component will be a consumer of this context
+```javascript
+import React, { useContext } from "react";
+import { LyricsContext } from "./LyricsContext";
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
+const Lyrics = () => {
+  const { artist, song } = useContext(LyricsContext);
+  return (
+    &lt;h4>
+      {song} by {artist}
+    &lt;/h4>
+  );
+};
 
-		<script>
-			// More info about config & dependencies:
-			// - https://github.com/hakimel/reveal.js#configuration
-			// - https://github.com/hakimel/reveal.js#dependencies
-			Reveal.initialize({
+export default Lyrics;
+```       
+And Just like that we used our second *Hook*: `useContext()`
+        </section>
+        <section data-markdown>
+          ## Lyrics Demo
+          Lets extract our SongList component
+          ### `SongList.js`
+```javascript
+import React from "react";
+
+const SongList = ({ songs = [], onClick }) => (
+  &lt;ul>
+    {songs.map(song => (
+      &lt;li key={song}>
+        &lt;button onClick={() => onClick(song)}>{song}&lt;/button>
+      &lt;/li>
+    ))}
+  &lt;/ul>
+);
+
+export default SongList;
+``` 
+        </section>
+        <section data-markdown>
+          ## Lyrics Demo
+          And use it in our App component
+          ### `SongList.js`
+```javascript
+// ...
+import SongList from "./SongList";
+// ...
+const App = () => {
+  const [artist, setArtist] = useState(null);
+  const [song, setSong] = useState(null);
+  const songs = localData?.[artist] || [];
+  // ...
+      &lt;SongList songs={songs} onClick={setSong}/>
+
+``` 
+        </section>
+        <section>
+          <h2>React Hooks: Lifecycle</h2>
+          <img style="border:0; height: 50vh;" src="img/react2020/hook-flow.png" />
+          <div><i>@donavon</i></div>
+        </section>
+        <section data-markdown>
+          # Thanks! 👍🏼
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
         controls: true,
         progress: true,
         history: true,
         center: false,
-        controlsLayout: 'edges',
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-				]
-			});
-		</script>
-	</body>
+        controlsLayout: "edges",
+        fragments: true,
+
+        markdown: {
+          smartypants: true
+        },
+        dependencies: [
+          { src: "plugin/markdown/marked.js" },
+          { src: "plugin/markdown/markdown.js" },
+          { src: "plugin/notes/notes.js", async: true },
+          {
+            src: "plugin/highlight/highlight.js",
+            async: true,
+            callback: function() {
+              hljs.initHighlightingOnLoad();
+            }
+          }
+        ]
+      });
+    </script>
+  </body>
 </html>
