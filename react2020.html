@@ -401,13 +401,108 @@ const App = () => {
 
 ``` 
         </section>
-        <section>
+        <section data-markdown>
+          ## Getting Data
+          
+          Simple API to retrieve the lyrics of a song: 
+
+          https://lyricsovh.docs.apiary.io/
+        </section>
+
+        <section data-markdown>
+          ## Lyrics Demo
+          We need a function to fetch lyrics form that API:
+          ### `Lyrics.js`
+```javascript
+// ...
+const api = "https://api.lyrics.ovh/v1";
+// ...
+  const [lyrics, setLyrics] = useState("");
+  const fetchLyrics = async (artist, song) => {
+    const response = await fetch(`${api}/${artist}/${song}/`);
+    const json = await response.json();
+    setLyrics(json.lyrics);
+  };
+``` 
+          But when are we going to execute this function.
+        </section>
+        <section data-markdown>
+          ## React Hooks: _useEffect_
+
+          `useEffect` lets you perform side effects in function components.
+
+          * If you’re familiar with React class lifecycle methods, you can think of 
+          `useEffect` Hook as `componentDidMount`, `componentDidUpdate`, and `componentWillUnmount` combined.
+
+```javascript
+useEffect(() => {
+  effect(); // Similar to componentDidMount + componentDidUpdate
+  return ()=>cleaning(); // think it as componentWillUnmount
+},[...props]); // if any of these props changes the effect is executed.
+```
+        </section>
+        <section data-markdown>
+          ## Lyrics Demo
+          So the UseEffect function for our app will be somehing like:
+          ### `Lyrics.js`
+```javascript
+  // ...
+  useEffect(() => {
+    if (artist && song) {
+      fetchLyrics(artist, song);
+    } else {
+      setLyrics("");
+    }
+  }, [artist, song]);
+  return (
+    &lt;>
+      &lt;h4>{song} by {artist}&lt;/h4>
+      &lt;div>
+        &lt;pre>{lyrics}&lt;/pre>
+      &lt;/div>
+    &lt;/>
+  );
+  // ...
+```
+        </section>
+
+        <section data-markdown>
+          ## Voilà
+
+          ![Image of the Lyrics demo](img/react2020/LyricsDemo.png)
+
+        </section>
+        <section data-markdown>
+          ## Additional Hooks
+
+          * `useReducer`
+          * `useCallback`
+          * `useMemo`
+          * `useRef`
+          * `useImperativeHandle`
+          * `useLayoutEffect`
+          * `useDebugValue`
+
+        </section>
+        <section data-markdown>
+          ## Custom Hooks
+
+          Building your own Hooks lets you extract component logic into reusable functions.
+
+          A custom Hook is a JavaScript function whose name starts with `use` and that may call other Hooks.
+
+
+
+        </section>        <section>
           <h2>React Hooks: Lifecycle</h2>
           <img style="border:0; height: 50vh;" src="img/react2020/hook-flow.png" />
           <div><i>@donavon</i></div>
         </section>
         <section data-markdown>
           # Thanks! 👍🏼
+
+          ![Image of the Lyrics demo](img/react2020/barneyOK.jpg)
+
         </section>
       </div>
     </div>
