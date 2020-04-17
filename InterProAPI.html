@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>InterPro API</title>
+
+    <link rel="stylesheet" href="css/reveal.css" />
+    <link rel="stylesheet" href="css/theme/ebi.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css" />
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.type = "text/css";
+      link.href = window.location.search.match(/print-pdf/gi)
+        ? "css/print/pdf.css"
+        : "css/print/paper.css";
+      document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
+    <style>
+      div.react2020 h3, div.react2020 h2 {
+        text-transform: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal react2020 concave">
+      <div class="slides">
+        <section
+          data-markdown
+          data-background="css/theme/ebi/bg_atoms.png"
+          class="ebi-bg"
+        >
+          ## Accessing InterPro programmatically 
+          
+          _Gustavo A. Salazar_
+        </section>
+        <section data-markdown>
+          ## A REST API
+          https://www.ebi.ac.uk/interpro/api/
+```txt
+   [ Client ]
+    ||    /\
+URL ||    || JSON
+    ||    ||
+    \/    ||
+   [ Server ]
+```
+        </section>
+
+        <section data-markdown>
+          ## The entry endpoint
+
+          The root of the endpoint tells us the number of entries per member database
+          https://www.ebi.ac.uk/interpro/api/entry
+        </section>
+        <section data-markdown>
+          ## The entry endpoint
+
+          https://www.ebi.ac.uk/interpro/api/entry/interpro
+          
+          Including `/interpro` as our database, has 2 effects:
+          * Filters the result to only include the entries with database `interpro`
+          * Displays the result as a list of entities
+        </section>
+        <section data-markdown>
+          ## The entry endpoint
+
+          https://www.ebi.ac.uk/interpro/api/entry/interpro/IPR000001
+          
+          Including `/IPR000001` as our accession, has 2 effects again:
+          * Selects that entity in particular
+          * Displays the result as a JSON object with the metadata of that entity
+        </section>
+        <section data-markdown>
+          ## URL structure
+          
+          All the endpoints follow the same structure
+          
+          `/api/`**`[endpoint]/`**
+          
+          It returns an aggregatted view of the endpoint, showing how many items per database.
+
+          ---
+          
+          `/api/`**`[endpoint]/`** **`[database]/`** 
+          
+          Generates the list of items in the endpoint for the seleccted DB
+
+          ---
+
+          `/api/`**`[endpoint]/`** **`[database]/`** **`[accession]/`**  
+          
+          It gives the metadata of the entity with that acceession.
+        </section>
+        <section data-markdown>
+          ## Long Lists
+
+          When using a URL that returns a list of items. It is likely that the number of 
+          results is higher than 20, which is the default size of InterPro API responses.
+
+          You can change this value using the parameter `page_size` to a maximum of 200. 
+          E.g. https://www.ebi.ac.uk/interpro/api/entry/sfld?page_size=200
+        </section>
+        <section data-markdown>
+          ## Long Lists
+
+          If the list is bigger than 200 items, then multiple HTTP requests are required
+          to get the full set.
+
+          You can get the link to the next page, from the current page in its key `next`.
+
+          e.g. 
+          
+          [/api/entry/sfld?page_size=200](https://www.ebi.ac.uk/interpro/api/entry/sfld?page_size=200)
+
+          ```
+          {
+            "next": "https://www.ebi.ac.uk/interpro/api/entry/sfld?cursor=cD1TRkxERzAxMDk1&page_size=200",
+            ...
+          }
+          ```
+
+        </section>
+        <section data-markdown>
+          ## Other endpoints Examples
+
+          * https://www.ebi.ac.uk/interpro/api/protein
+          * https://www.ebi.ac.uk/interpro/api/proteome
+          * https://www.ebi.ac.uk/interpro/api/structure/pdb
+          * https://www.ebi.ac.uk/interpro/api/set/cdd
+          * https://www.ebi.ac.uk/interpro/api/taxonomy/uniprot/9606
+          * https://www.ebi.ac.uk/interpro/api/proteome/uniprot/UP000464024/
+
+        </section>
+        <section data-markdown>
+          ## Mixing endpoints
+
+          Interpro API allows you to use multiple endpoints.
+
+          Firstly, we will call _[ENDPOINT BLOCK]_ to the group of URL levels that relate to a particular endoint:
+           **`[endpoint]/`** **`[database]/`** **`[accession]/`**
+
+          So, it is possible to put together more than one _[ENDPOINT BLOCK]_.
+
+          * `/api/`_[ENDPOINT BLOCK]_ `/` _[ENDPOINT BLOCK]_ `/`
+        </section>
+        <section data-markdown>
+          ## Mixing endpoints
+          The first _[ENDPOINT BLOCK]_ defines the main endpoint and output of the response. 
+          
+          Any other _[ENDPOINT BLOCK]_ will be considered as a filter.
+
+          e.g.
+          [/api/protein/uniprot/entry/interpro/IPR000001](https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000001)
+        </section>
+        <section data-markdown>
+          ## Mixing endpoints
+          [/api/protein/uniprot/entry/interpro/IPR000001](https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000001)
+
+          * First _[ENDPOINT BLOCK]_:
+            `/protein/uniprot`
+          * Second _[ENDPOINT BLOCK]_:
+            `/entry/interpro/IPR000001`
+
+          ---
+
+          Returns the list of uniprot proteins that are related (i.e. Have a match) with the interpro entry with accession `IPR000001`.
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: false,
+        controlsLayout: "edges",
+        fragments: true,
+
+        markdown: {
+          smartypants: true
+        },
+        dependencies: [
+          { src: "plugin/markdown/marked.js" },
+          { src: "plugin/markdown/markdown.js" },
+          { src: "plugin/notes/notes.js", async: true },
+          {
+            src: "plugin/highlight/highlight.js",
+            async: true,
+            callback: function() {
+              hljs.initHighlightingOnLoad();
+            }
+          }
+        ]
+      });
+    </script>
+  </body>
+</html>
