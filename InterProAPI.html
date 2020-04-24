@@ -42,6 +42,8 @@
           ## Accessing InterPro programmatically 
           
           _Gustavo A. Salazar_
+
+          ![API Image](img/tool_api_logo.png)
         </section>
         <section data-markdown>
           ## A REST API
@@ -74,20 +76,30 @@ URL ||    || JSON
         <section data-markdown>
           ## The entry endpoint
 
-          https://www.ebi.ac.uk/interpro/api/entry/interpro/IPR000001
+          https://www.ebi.ac.uk/interpro/api/entry/interpro/IPR000126
           
-          Including `/IPR000001` as our accession, has 2 effects again:
+          Including `/IPR000126` as our accession, has 2 effects again:
           * Selects that entity in particular
           * Displays the result as a JSON object with the metadata of that entity
         </section>
         <section data-markdown>
           ## URL structure
           
-          All the endpoints follow the same structure
+          All the endpoints follow the same structure.
+
+          ---
           
           `/api/`**`[endpoint]/`**
           
           It returns an aggregatted view of the endpoint, showing how many items per database.
+
+          ---
+
+        </section>
+        <section data-markdown>
+          ## URL structure
+          
+          All the endpoints follow the same structure.
 
           ---
           
@@ -96,10 +108,31 @@ URL ||    || JSON
           Generates the list of items in the endpoint for the seleccted DB
 
           ---
+        </section>
+        <section data-markdown>
+          ## URL structure
+          
+          All the endpoints follow the same structure.
+
+          ---
 
           `/api/`**`[endpoint]/`** **`[database]/`** **`[accession]/`**  
           
           It gives the metadata of the entity with that acceession.
+
+          ---
+        </section>
+
+        <section data-markdown>
+          ## Examples
+
+          * https://www.ebi.ac.uk/interpro/api/protein
+          * https://www.ebi.ac.uk/interpro/api/proteome
+          * https://www.ebi.ac.uk/interpro/api/structure/pdb
+          * https://www.ebi.ac.uk/interpro/api/set/cdd
+          * https://www.ebi.ac.uk/interpro/api/taxonomy/uniprot/9606
+          * https://www.ebi.ac.uk/interpro/api/proteome/uniprot/UP000464024/
+
         </section>
         <section data-markdown>
           ## Long Lists
@@ -119,7 +152,6 @@ URL ||    || JSON
           You can get the link to the next page, from the current page in its key `next`.
 
           e.g. 
-          
           [/api/entry/sfld?page_size=200](https://www.ebi.ac.uk/interpro/api/entry/sfld?page_size=200)
 
           ```
@@ -128,18 +160,19 @@ URL ||    || JSON
             ...
           }
           ```
-
+          
+          [Next](https://www.ebi.ac.uk/interpro/api/entry/sfld?cursor=cD1TRkxERzAxMDk1&page_size=200)
         </section>
         <section data-markdown>
-          ## Other endpoints Examples
+          ## Long Lists
 
-          * https://www.ebi.ac.uk/interpro/api/protein
-          * https://www.ebi.ac.uk/interpro/api/proteome
-          * https://www.ebi.ac.uk/interpro/api/structure/pdb
-          * https://www.ebi.ac.uk/interpro/api/set/cdd
-          * https://www.ebi.ac.uk/interpro/api/taxonomy/uniprot/9606
-          * https://www.ebi.ac.uk/interpro/api/proteome/uniprot/UP000464024/
-
+          The last page would have `null` as the value the `next` key.
+          ```
+          {
+            "next": null,
+            ...
+          }
+          ```
         </section>
         <section data-markdown>
           ## Mixing endpoints
@@ -160,20 +193,127 @@ URL ||    || JSON
           Any other _[ENDPOINT BLOCK]_ will be considered as a filter.
 
           e.g.
-          [/api/protein/uniprot/entry/interpro/IPR000001](https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000001)
+          [/api/protein/uniprot/entry/interpro/IPR000126](https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000126)
         </section>
         <section data-markdown>
           ## Mixing endpoints
-          [/api/protein/uniprot/entry/interpro/IPR000001](https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000001)
+          [/api/protein/uniprot/entry/interpro/IPR000126](https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000126)
 
           * First _[ENDPOINT BLOCK]_:
             `/protein/uniprot`
           * Second _[ENDPOINT BLOCK]_:
-            `/entry/interpro/IPR000001`
+            `/entry/interpro/IPR000126`
 
           ---
 
-          Returns the list of uniprot proteins that are related (i.e. Have a match) with the interpro entry with accession `IPR000001`.
+          Returns the list of uniprot proteins that are related (i.e. Have a match) with the interpro entry with accession `IPR000126`.
+        </section>
+        <section data-markdown>
+          ## Programatic Access
+
+          This is a python3 script to print out the accessions of the proteins that have a match with `IPR000126`.
+
+```python
+from urllib import request
+import json
+
+url = "https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000126"
+
+req = request.Request(url, headers={"Accept": "application/json"})
+res = request.urlopen(req)
+
+payload = json.loads(res.read().decode())
+
+for item in payload["results"]:
+  print(item["metadata"]["accession"])
+```
+        </section>
+        <section data-markdown>
+          ## Programatic Access
+
+          This is a python3 script to print out the accessions of the proteins that have a match with `IPR000126`.
+
+```python
+from urllib import request
+from time import sleep
+import json
+
+url = "https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000126?page_size=200"
+
+while url is not None:
+  req = request.Request(url, headers={"Accept": "application/json"})
+  res = request.urlopen(req)
+
+  payload = json.loads(res.read().decode())
+
+  for item in payload["results"]:
+    print(item["metadata"]["accession"])
+  url = payload["next"]
+  sleep(1)
+```
+        </section>
+        <section data-markdown>
+          ## HTTP Status Codes
+
+          * `200`: OK
+          * `204`: No Content
+            https://www.ebi.ac.uk/interpro/api/structure/pdb/protein/UniProt/A0A000
+          * `404`: Not Found
+            https://www.ebi.ac.uk/interpro/api/badEndpoint
+          * `408`: Timeout
+          * `410`: Gone
+            https://www.ebi.ac.uk/interpro/api/entry/InterPro/IPR000038
+          * `500`: Server Error
+        </section>
+        <section data-markdown>
+          ## InterPro API timeouts
+
+          If a request takes longer than a minute:
+          * The API will return the HTTP status code `408`.
+          * The request is moved to run in the background.
+
+          If you try the same URL later, the API response would be:
+          * An almost instant `408`, meaning the previous query is still running
+          * The response of the query.
+        </section>
+        <section data-markdown>
+          ## InterPro API timeouts
+```python
+from urllib import request
+from time import sleep
+import json
+
+url = "https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000126?page_size=200"
+
+while url is not None:
+  req = request.Request(url, headers={"Accept": "application/json"})
+  res = request.urlopen(req)
+  if res.status == 408:
+    sleep(61)
+    continue
+
+  payload = json.loads(res.read().decode())
+
+  for item in payload["results"]:
+    print(item["metadata"]["accession"])
+  url = payload["next"]
+  sleep(1)
+```
+        </section>
+        <section data-markdown>
+          ## InterPro script generator
+
+          We provide a starting point to create some scripts to query our API.
+
+          You can go to the link below, to select the data you are interested in, an we generate a script that you can use.
+
+          https://www.ebi.ac.uk/interpro/result/download/#/entry/InterPro/
+
+          We provide scripts in Python3, Python2, Perl and JavaScript. Generating output in TSV, FastA, or JSON.
+
+        </section>
+        <section data-markdown>
+          # Thanks! 👍🏼
         </section>
       </div>
     </div>
