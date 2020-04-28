@@ -173,7 +173,7 @@
           
           `/api/`**`[endpoint]/`**
           
-          It returns an aggregatted view of the endpoint, showing how many items per database.
+          It returns an aggregated view of the endpoint, showing how many items per database.
 
           ---
 
@@ -267,7 +267,7 @@
         <section data-markdown>
           ## Long Lists
 
-          The last page would have `null` as the value the `next` key.
+          The last page would have `null` as the value for the `next` key.
           ```
           {
             "next": null,
@@ -403,9 +403,10 @@ while url is not None:
           If a request takes longer than a minute:
           * The API will return the HTTP status code `408`.
           * The request is moved to run in the background.
-
+          
+          ___
           If you try the same URL later, the API response would be:
-          * An almost instant `408`, meaning the previous query is still running
+          * An almost instant `408`, meaning the previous query is still running, or
           * The response of the query.
         </section>
         <section data-markdown>
@@ -437,7 +438,7 @@ while url is not None:
 
           We provide a starting point to create some scripts to query our API.
 
-          You can go to the link below, to select the data you are interested in, an we generate a script that you can use.
+          You can go to the link below, select the data you are interested in, and we generate a script that you can use.
 
           [InterPro script generator](https://www.ebi.ac.uk/interpro/result/download/#/entry/InterPro/)
 
@@ -465,10 +466,10 @@ while url is not None:
                 Alex Mitchell <br/>
                 Lorna Richardson <br/>
                 Alex Bateman <br/>
+                Typhaine Paysan-Lafosse <br/>
               </div>
               <br/>
               <div>
-                Gustavo Salazar-Orejuela <br/>
                 Matloob Qureshi <br/>
                 Swaathi Kandasaamy <br/>
               </div>
