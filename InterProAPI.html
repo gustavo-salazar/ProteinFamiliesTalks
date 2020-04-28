@@ -29,45 +29,111 @@
       div.react2020 h3, div.react2020 h2 {
         text-transform: none;
       }
+      .reveal section img {
+        border: 0;
+      }
     </style>
   </head>
   <body>
     <div class="reveal react2020 concave">
       <div class="slides">
+        <section data-markdown style="font-size:0.8em">
+          ## Welcome - webinar instructions
+          
+          * The webinar will start soon
+
+          * If you have problems with sound, please try exiting GoToTraining and restarting it
+
+          * All microphones will be muted while the trainer is speaking
+
+          * If you have a question please use the chat box at the bottom of the GoToTraining box
+
+          * Please complete the feedback survey which will launch at the end of the webinar
+
+          * The webinar will be recorded and added to Train online          
+        </section>
         <section
           data-markdown
           data-background="css/theme/ebi/bg_atoms.png"
           class="ebi-bg"
         >
           ## Accessing InterPro programmatically 
+          ###### Part of the InterPro Webinar Series
           
           _Gustavo A. Salazar_
 
-          ![API Image](img/tool_api_logo.png)
+          ![API Image](./img/tool_api_logo.png)
+        </section>
+        <section data-markdown>
+          ## Outline
+
+          1. 🔲 REST API.
+          2. 🔲 The `/entry` endpoint.
+          3. 🔲 URL structure.
+          4. 🔲 Long Lists.
+          5. 🔲 Mixing endpoints.
+          6. 🔲 Programatic Access.
+
         </section>
         <section data-markdown>
           ## A REST API
+
+          __API__: Application programming interface
+
+          __REST__: Representational State Transfer
+
+          ```txt
+            [ Client ]
+              ||    /\
+          URL ||    || JSON
+              ||    ||
+              \/    ||
+            [ Server ]
+          ```
+        </section>
+        <section data-markdown>
+          ## Interpro API
+
           https://www.ebi.ac.uk/interpro/api/
-```txt
-   [ Client ]
-    ||    /\
-URL ||    || JSON
-    ||    ||
-    \/    ||
-   [ Server ]
-```
+
+          ---
+
+          ##### Endpoints
+
+          1. `/entry`
+          2. `/protein`
+          3. `/structure`
+          4. `/taxonomy`
+          5. `/proteome`
+          6. `/set`
+
+        </section>
+        <section data-markdown>
+          ## Outline
+
+          1. ✅ REST API.
+
+          ---
+          2. 🔲 The `/entry` endpoint.
+
+          ---
+          3. 🔲 URL structure.
+          4. 🔲 Long Lists.
+          5. 🔲 Mixing endpoints.
+          6. 🔲 Programatic Access.
+
         </section>
 
         <section data-markdown>
           ## The entry endpoint
+          [/api/entry](https://www.ebi.ac.uk/interpro/api/entry)
 
           The root of the endpoint tells us the number of entries per member database
-          https://www.ebi.ac.uk/interpro/api/entry
         </section>
         <section data-markdown>
           ## The entry endpoint
 
-          https://www.ebi.ac.uk/interpro/api/entry/interpro
+          [/entry/interpro](https://www.ebi.ac.uk/interpro/api/entry/interpro)
           
           Including `/interpro` as our database, has 2 effects:
           * Filters the result to only include the entries with database `interpro`
@@ -76,12 +142,28 @@ URL ||    || JSON
         <section data-markdown>
           ## The entry endpoint
 
-          https://www.ebi.ac.uk/interpro/api/entry/interpro/IPR000126
+          [/entry/interpro/IPR000126](https://www.ebi.ac.uk/interpro/api/entry/interpro/IPR000126)
           
           Including `/IPR000126` as our accession, has 2 effects again:
           * Selects that entity in particular
           * Displays the result as a JSON object with the metadata of that entity
         </section>
+        <section data-markdown>
+          ## Outline
+
+          1. ✅ REST API.
+          2. ✅ The `/entry` endpoint.
+
+          ---
+          3. 🔲 URL structure.
+
+          ---
+          4. 🔲 Long Lists.
+          5. 🔲 Mixing endpoints.
+          6. 🔲 Programatic Access.
+
+        </section>
+
         <section data-markdown>
           ## URL structure
           
@@ -126,12 +208,27 @@ URL ||    || JSON
         <section data-markdown>
           ## Examples
 
-          * https://www.ebi.ac.uk/interpro/api/protein
-          * https://www.ebi.ac.uk/interpro/api/proteome
-          * https://www.ebi.ac.uk/interpro/api/structure/pdb
-          * https://www.ebi.ac.uk/interpro/api/set/cdd
-          * https://www.ebi.ac.uk/interpro/api/taxonomy/uniprot/9606
-          * https://www.ebi.ac.uk/interpro/api/proteome/uniprot/UP000464024/
+          * [/api/protein](https://www.ebi.ac.uk/interpro/api/protein)
+          * [/api/proteome](https://www.ebi.ac.uk/interpro/api/proteome)
+          * [/api/structure/pdb](https://www.ebi.ac.uk/interpro/api/structure/pdb)
+          * [/api/set/cdd](https://www.ebi.ac.uk/interpro/api/set/cdd)
+          * [/api/taxonomy/uniprot/9606](https://www.ebi.ac.uk/interpro/api/taxonomy/uniprot/9606)
+          * [/api/proteome/uniprot/UP000464024/](https://www.ebi.ac.uk/interpro/api/proteome/uniprot/UP000464024/)
+
+        </section>
+        <section data-markdown>
+          ## Outline
+
+          1. ✅ REST API.
+          2. ✅ The `/entry` endpoint.
+          3. ✅ URL structure.
+
+          ---
+          4. 🔲 Long Lists.
+
+          ---
+          5. 🔲 Mixing endpoints.
+          6. 🔲 Programatic Access.
 
         </section>
         <section data-markdown>
@@ -140,8 +237,12 @@ URL ||    || JSON
           When using a URL that returns a list of items. It is likely that the number of 
           results is higher than 20, which is the default size of InterPro API responses.
 
+          e.g. [/api/entry/sfld](https://www.ebi.ac.uk/interpro/api/entry/sfld)
+
+          ---
           You can change this value using the parameter `page_size` to a maximum of 200. 
-          E.g. https://www.ebi.ac.uk/interpro/api/entry/sfld?page_size=200
+
+          e.g. [/api/entry/sfld?page_size=200](https://www.ebi.ac.uk/interpro/api/entry/sfld?page_size=200)
         </section>
         <section data-markdown>
           ## Long Lists
@@ -175,38 +276,69 @@ URL ||    || JSON
           ```
         </section>
         <section data-markdown>
-          ## Mixing endpoints
+          ## Outline
 
-          Interpro API allows you to use multiple endpoints.
+          1. ✅ REST API.
+          2. ✅ The `/entry` endpoint.
+          3. ✅ URL structure.
+          4. ✅ Long Lists.
 
-          Firstly, we will call _[ENDPOINT BLOCK]_ to the group of URL levels that relate to a particular endoint:
-           **`[endpoint]/`** **`[database]/`** **`[accession]/`**
+          ---
+          5. 🔲 Mixing endpoints.
 
-          So, it is possible to put together more than one _[ENDPOINT BLOCK]_.
+          ---
+          6. 🔲 Programatic Access.
 
-          * `/api/`_[ENDPOINT BLOCK]_ `/` _[ENDPOINT BLOCK]_ `/`
+        </section>
+        <section>
+          <h2>Mixing endpoints</h2>
+
+          <p>Interpro API allows you to use multiple endpoints.</p>
+
+          <p>Firstly, we will call <b>[ENDPOINT BLOCK]</b> to the group of URL levels that relate to a particular endpoint:</p>
+          <p><code>/api/</code> <code style="color:darkslateblue">[endpoint]</code> / <code style="color:slateblue">[database]</code> / <code style="color:lightslategrey">[accession]</code> /</p>
+
+          <p>So, it is possible to put together more than one <b>[ENDPOINT BLOCK]</b>.</p>
+
+          <p><code>/api/</code> <b style="color:lightcoral">[ENDPOINT BLOCK]</b> / <b style="color:olive">[ENDPOINT BLOCK]</b> /</p>
+        </section>
+        <section>
+          <h2>Mixing endpoints</h2>
+
+          <p><code>/api/</code> <b style="color:lightcoral">[ENDPOINT BLOCK]</b> / <b style="color:olive">[ENDPOINT BLOCK]</b> /</p>
+
+          <ul>
+            <li>The first <b style="color:lightcoral">[ENDPOINT BLOCK]</b> defines the main endpoint and output of the response. </li>
+            
+            <li>Any other <b style="color:olive">[ENDPOINT BLOCK]</b> will be considered as a filter.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Mixing endpoints</h2>
+          <p>e.g. 
+            <a href="https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000126">
+              /api<span style="color:lightcoral">/protein/uniprot</span><span style="color:olive">/entry/interpro/IPR000126</span>
+            </a>
+          </p>
+
+          <hr/>
+
+          <p>Returns the list of uniprot proteins that are related (i.e. Have a match) with the interpro entry with accession <span style="color:olive">IPR000126</span>.</p>
         </section>
         <section data-markdown>
-          ## Mixing endpoints
-          The first _[ENDPOINT BLOCK]_ defines the main endpoint and output of the response. 
-          
-          Any other _[ENDPOINT BLOCK]_ will be considered as a filter.
+          ## Outline
 
-          e.g.
-          [/api/protein/uniprot/entry/interpro/IPR000126](https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000126)
-        </section>
-        <section data-markdown>
-          ## Mixing endpoints
-          [/api/protein/uniprot/entry/interpro/IPR000126](https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000126)
+          1. ✅ REST API.
+          2. ✅ The `/entry` endpoint.
+          3. ✅ URL structure.
+          4. ✅ Long Lists.
+          5. ✅ Mixing endpoints.
 
-          * First _[ENDPOINT BLOCK]_:
-            `/protein/uniprot`
-          * Second _[ENDPOINT BLOCK]_:
-            `/entry/interpro/IPR000126`
+          ---
+          6. 🔲 Programatic Access.
 
           ---
 
-          Returns the list of uniprot proteins that are related (i.e. Have a match) with the interpro entry with accession `IPR000126`.
         </section>
         <section data-markdown>
           ## Programatic Access
@@ -257,12 +389,12 @@ while url is not None:
 
           * `200`: OK
           * `204`: No Content
-            https://www.ebi.ac.uk/interpro/api/structure/pdb/protein/UniProt/A0A000
+            [/api/structure/pdb/protein/UniProt/A0A000](https://www.ebi.ac.uk/interpro/api/structure/pdb/protein/UniProt/A0A000)
           * `404`: Not Found
-            https://www.ebi.ac.uk/interpro/api/badEndpoint
+            [/api/badEndpoint](https://www.ebi.ac.uk/interpro/api/badEndpoint)
           * `408`: Timeout
           * `410`: Gone
-            https://www.ebi.ac.uk/interpro/api/entry/InterPro/IPR000038
+            [/api/entry/InterPro/IPR000038](https://www.ebi.ac.uk/interpro/api/entry/InterPro/IPR000038)
           * `500`: Server Error
         </section>
         <section data-markdown>
@@ -307,14 +439,72 @@ while url is not None:
 
           You can go to the link below, to select the data you are interested in, an we generate a script that you can use.
 
-          https://www.ebi.ac.uk/interpro/result/download/#/entry/InterPro/
+          [InterPro script generator](https://www.ebi.ac.uk/interpro/result/download/#/entry/InterPro/)
 
           We provide scripts in Python3, Python2, Perl and JavaScript. Generating output in TSV, FastA, or JSON.
 
         </section>
         <section data-markdown>
-          # Thanks! 👍🏼
+          ## Outline
+
+          1. ✅ REST API.
+          2. ✅ The `/entry` endpoint.
+          3. ✅ URL structure.
+          4. ✅ Long Lists.
+          5. ✅ Mixing endpoints.
+          6. ✅ Programatic Access.
         </section>
+        <section style="font-size:0.8em">
+          <h2>Acknowledgments</h2>
+          <div style="display:inline-flex; justify-content: space-evenly; width: 100%;">
+            <div>
+              <div>
+                Hsin-Yu Chang <br/>
+                Sara Chuguransky <br/>
+                Lowri Williams <br/>
+                Alex Mitchell <br/>
+                Lorna Richardson <br/>
+                Alex Bateman <br/>
+              </div>
+              <br/>
+              <div>
+                Gustavo Salazar-Orejuela <br/>
+                Matloob Qureshi <br/>
+                Swaathi Kandasaamy <br/>
+              </div>
+            </div>
+            <div>
+              <div>
+                Gift Nuka <br/>
+                Simon Potter <br/>
+                Matthias Blum <br/>
+              </div>
+              <br/>
+              <div>
+                <b>Group Head:</b> <br/>
+                Rob Finn<br/>
+              </div>
+            </div>
+          </div>
+          <img src="./img/logos.png" style="background:white"/>
+        </section>
+        <section data-markdown>
+          # Thanks! 👍🏼
+
+          https://www.ebi.ac.uk/interpro/help/documentation/
+        </section>
+        <section style="font-size:0.8em">
+          <h3>Upcoming webinars</h3>
+          
+          <p>See the full list of upcoming webinars at 
+            <a href="https://www.ebi.ac.uk/training/webinars">https://www.ebi.ac.uk/training/webinars</a>
+          </p>
+          <img src="./img/webinars.png" style="width:500px"/>
+
+          <h3>Tell us your thoughts</h3>
+
+          <p>Please fill in the survey that launches after the webinar – thanks!</p>
+        </section>      
       </div>
     </div>
 
