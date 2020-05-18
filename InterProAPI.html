@@ -351,7 +351,7 @@ import json
 
 url = "https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000126"
 
-req = request.Request(url, headers={"Accept": "application/json"})
+req = request.Request(url)
 res = request.urlopen(req)
 
 payload = json.loads(res.read().decode())
@@ -373,7 +373,7 @@ import json
 url = "https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000126?page_size=200"
 
 while url is not None:
-  req = request.Request(url, headers={"Accept": "application/json"})
+  req = request.Request(url)
   res = request.urlopen(req)
 
   payload = json.loads(res.read().decode())
@@ -419,7 +419,7 @@ import json
 url = "https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000126?page_size=200"
 
 while url is not None:
-  req = request.Request(url, headers={"Accept": "application/json"})
+  req = request.Request(url)
   res = request.urlopen(req)
   if res.status == 408:
     sleep(61)
