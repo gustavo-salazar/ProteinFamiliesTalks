@@ -165,6 +165,7 @@
         display: flex;
         width: 100%;
         justify-content: space-around;
+        align-items: center;
       }
     </style>
   </head>
@@ -560,7 +561,7 @@
                 <ul>
                   <li>Proteins in MySQL: 184M</li>
                   <li>Documents in ElasticSearch: 1.6B</li>
-                  <li>Ebi-search: 300K entries and 3.2B X-references</li>
+                  <li>Ebi-search: 218K entries and 4.3B X-references</li>
                 </ul>
               </li>
             </ul>
@@ -773,7 +774,193 @@
             </tr>
           </table>
         </section>
-        <section
+        <section>
+          <h2>☁️ External sources</h2>
+          <section>
+            <h4>InterProScan Web service</h4>
+            <ul>
+              <li>Our group mantains the tool</li>
+              <li>www-prod maintains the service</li>
+              <li>https://www.ebi.ac.uk/seqdb/confluence/display/JDSAT/InterProScan+5+Help+and+Documentation</li>
+            </ul>
+          </section>
+          <section>
+            <h4>EBI Search</h4>
+            <ul>
+              <li>Our group generates the files to be indexed</li>
+              <li>EBI search provides the service</li>
+              <li>https://www.ebi.ac.uk/ebisearch/documentation.ebi</li>
+            </ul>
+          </section>
+          <section>
+            <h4>Genome 3D</h4>
+            <ul>
+              <li>We include their data thanks to a collaboration between the teams</li>
+              <li>Genome3D provides the service</li>
+              <li>http://www.genome3d.eu/api/</li>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <table class="fourth flowchart">
+            <tr>
+              <td></td>
+              <td>
+                <div style="display: flex; margin-left: 130px;">
+                  <div class="server">
+                    <img src="./img/server.svg" width="80px" />
+                    <div><small>Client VMs</small></div>
+                  </div>
+                </div>
+                <img
+                  src="./img/arrow.png"
+                  width="30px"
+                  style="transform: rotate(90deg);"
+                />
+              </td>
+              <td class="flex-row">
+                <img
+                src="./img/arrow.png"
+                width="30px"
+                style="transform: rotate(180deg);"
+              /><img src="./img/js_logos.png" width="80px" />
+
+              </td>
+            </tr>
+            <tr>
+              <td class="flex-row"><img src="./img/user.png" width="150px" /><img src="./img/arrow.png" width="30px" /></td>
+              <td>
+                <img src="./img/newinterpro.png" width="200px" />
+                <footer><span>InterPro Client</span><br /></footer>
+              </td>
+              <td class="flex-row">
+                <img src="./img/arrow.png" width="30px" height="20px"/>
+                <img src="./img/cloud.png" width="120px" />
+                <div style="font-size: 0.6em;">
+                  <div>InterProScan</div>
+                  <div>EBI-search</div>
+                  <div>Geome3D</div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                <img
+                  src="./img/arrow.png"
+                  width="30px"
+                  style="transform: rotate(-90deg);"
+                />
+                <div style="display: flex; align-items: center;">
+                  <div class="server">
+                    <img src="./img/db.png" width="50px" />
+                    <div><small>Redis</small></div>
+                  </div>
+                  <img src="./img/arrow.png" width="30px" height="20px"/>
+
+                  <div class="server">
+                    <img src="./img/server.svg" width="80px" />
+                    <div><small>API VMs</small></div>
+                  </div>
+                  <div>
+                  <div style="display: flex; align-items: center;">
+                    <img
+                      src="./img/arrow.png"
+                      width="30px"
+                      height="20px"
+                      style="transform: rotate(180deg);"
+                    />              
+                    <div style="display: flex; flex-direction: column;">
+                      <img src="./img/python-logo.png" style="width: 80px;" />
+                      <img src="./img/django-logo.png" style="width: 80px;" />
+                      <img src="./img/drf-logo.png" style="width: 80px;" />
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                <img
+                  src="./img/arrow.png"
+                  width="30px"
+                  style="transform: rotate(-90deg);"
+                />
+                <div style="display: flex; margin-left: 65px;">
+                  <div class="server">
+                    <img src="./img/db.png" width="50px" />
+                    <div><small>MySQL</small></div>
+                  </div>
+                  <div class="server">
+                    <img src="./img/db.png" width="50px" />
+                    <div><small>ElasticSearch </small></div>
+                  </div>
+                </div>
+              </td>
+              <td></td>
+            </tr>
+          </table>
+        </section>
+        <section>
+          <h3>InterPro High level view</h3>
+          <div class="flowline centered third">
+            <div class="box third">
+              <img src="./img/box.png"/>
+              <footer>
+                Production
+                <div class="photos">
+                  <img src="./img/team/gift.jpg" class="photo"/>
+                  <img src="./img/team/blum.jpg" class="photo"/>
+                  <img src="./img/team/tiago.jpg" class="photo"/>
+                </div>
+              </footer>
+            </div>
+            <img src="./img/arrow.png"style="height: 25%;"/>
+            <div class="box third">
+              <img src="./img/box.png"/>
+              <footer>
+                Curation
+                <div class="photos">
+                  <img src="./img/team/hsin_yu.jpg" class="photo"/>
+                  <img src="./img/team/typhaine.jpg" class="photo"/><br/>
+                  <img src="./img/team/sara.jpg" class="photo"/>
+                  <img src="./img/team/lowri.jpg" class="photo"/>
+                </div>
+              </footer>
+            </div>
+            <img src="./img/arrow.png"style="height: 25%;"/>
+            <div class="box third">
+              <img src="./img/box.png"/>
+              <footer>
+                Data Warehouse
+                <div class="photos">
+                  <img src="./img/team/blum.jpg" class="photo"/>
+                  <img src="./img/team/gift.jpg" class="photo"/>
+                  <img src="./img/team/typhaine.jpg" class="photo"/><br/>
+                  <img src="./img/team/matloob.jpg" class="photo"/>
+                  <img src="./img/team/gustavo.jpg" class="photo"/>
+                  <img src="./img/team/swaathi.jpg" class="photo"/>
+                </div>
+              </footer>
+            </div>
+            <img src="./img/arrow.png"style="height: 25%;"/>
+            <div class="box third">
+              <img src="./img/box.png"/>
+              <footer>
+                Website
+                <div class="photos">
+                  <img src="./img/team/matloob.jpg" class="photo"/>
+                  <img src="./img/team/gustavo.jpg" class="photo"/>
+                  <img src="./img/team/swaathi.jpg" class="photo"/>
+                </div>
+              </footer>
+            </div>
+          </div>
+          <br/><br/>
+        </section>        <section
           data-background="https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif"
           class="ebi-bg"
         >
