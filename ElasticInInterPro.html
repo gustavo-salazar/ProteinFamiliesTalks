@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Elasticsearch in InterPro</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"
+    />
+
+    <link rel="stylesheet" href="css/reveal.css" />
+    <link rel="stylesheet" href="css/theme/ebi.css" id="theme" />
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css" />
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.type = "text/css";
+      link.href = window.location.search.match(/print-pdf/gi)
+        ? "css/print/pdf.css"
+        : "css/print/paper.css";
+      document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
+
+    <!--[if lt IE 9]> <script src="lib/js/html5shiv.js"></script> <![endif]-->
+    <style type="text/css">
+      .reveal section img {
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+      img.opening-logo {
+        width: 25vw;
+        position: absolute;
+        top: 53vh;
+        left: 71%;
+      }
+      .reveal h1,
+      .reveal h2,
+      .reveal h3,
+      .reveal h4,
+      .reveal h5 {
+        text-transform: capitalize;
+      }
+      .reveal h1 a,
+      .reveal h2 a,
+      .reveal h3 a,
+      .reveal h4 a,
+      .reveal h5 a {
+        text-transform: lowercase;
+      }
+      .flowline {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .fullslide {
+        height: 60vh;
+      }
+      .half {
+        height: 30vh;
+      }
+      .third {
+        height: 20vh;
+        font-size: 0.9em;
+      }
+      .fourth {
+        height: 16vh;
+        font-size: 0.8em;
+      }
+      .fifth {
+        height: 12vh;
+        font-size: 0.8em;
+      }
+      .reveal section img.icon {
+        height: 0.6em;
+        margin: 0;
+        padding-bottom: 0.1em;
+      }
+      .box {
+        display: inline-block;
+        text-align: center;
+      }
+      .centered {
+        width: 100%;
+        text-align: center;
+      }
+      div.box img {
+        margin: 0;
+      }
+      div.box footer {
+        line-height: 0.3;
+        margin-bottom: 1em;
+      }
+      ul {
+        font-size: 0.9em;
+        width: 100%;
+      }
+      ul {
+        font-size: 0.8em;
+      }
+      .photos {
+        margin-top: 1em;
+      }
+      div.box img.photo {
+        border: 2px solid red;
+        border-radius: 50%;
+        width: 5vh;
+        margin: 3px;
+      }
+      .over-demo {
+        position: absolute;
+        width: 40%;
+        right: 0;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5), 0 5px 25px rgba(0, 0, 0, 0.2);
+        background-color: rgba(0, 0, 0, 0.9);
+        color: #fff;
+        padding: 20px;
+        font-size: 20px;
+        text-align: left;
+      }
+
+      .server {
+        margin-right: 1em;
+        margin-left: 1em;
+        line-height: 0;
+      }
+      .reveal section .server > img {
+        margin: 0;
+      }
+      table.flowchart,
+      table.flowchart tr,
+      table.flowchart tr td {
+        border: 0;
+      }
+      table.flowchart td {
+        text-align: center;
+        min-width: 200px;
+      }
+      table.flowchart img {
+        margin:0;
+      }
+      .api-vms {
+        background-color: #cccccc;
+      }
+      .api-vms footer{
+        font-size: 0.6em;
+        font-weight: bold;
+        color: #338333;
+        padding: 0 1em 0;
+      }
+      .flex-row {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .stats {
+        display: flex;
+        font-size: 0.7em;
+      }
+      .stats>div{
+        border: 1px solid gray;
+        margin-right: 1em;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-background="css/theme/ebi/bg_gears.png" class="ebi-bg">
+          <h2><i>Elasticsearch</i> in InterPro</h2>
+          <p>https://www.ebi.ac.uk/interpro/</p>
+          <img src="./img/logo_lightblue.svg" class="opening-logo" />
+        </section>
+        <section >
+          <section >
+            <h2>Data organization</h2>
+            <p>First attempt: <b>MySQL</b></p>
+            <img data-src="img/mysql_attempt.png" width="60%"/>
+            <small style="width: 34%; display: inline-block;margin-left: 1em;">
+              <b>Pros</b>
+              <ul>
+                <li>Reliable</li>
+                <li>Ease of cross-table</li>
+                <li>Returns exact counts</li>
+                <li>Can select subsets of results</li>
+                <li>Lots of experience in team</li>
+                <li>High support in Django - DRF</li>
+                <li>EBI supported</li>
+              </ul>
+              <br/><br/>
+              <b>Cons</b><br/>
+              <ul>
+                <li>SLOW for Protein related queries</li>
+                <li>Scalability</li>
+              </ul>
+            </small>
+          </section>
+          <section >
+            <h2>Data organization</h2>
+            <p>Second attempt: <b>Hybrid</b> (MySQL + No-normalized DB)</p>
+            <img data-src="img/doc_store_attempt.png" width="60%"/>
+            <small style="width: 34%; display: inline-block;margin-left: 1em;">
+              <b>Pros</b>
+              <ul>
+                <li>Number of JOINS reduced.</li>
+                <li>Django models are conserved</li>
+                <li>Speed at querying</li>
+                <li>Sharding</li>
+                <li>Replicates</li>
+              </ul>
+              <br/><br/>
+              <b>Cons</b><br/>
+              <ul>
+                <li>No SQL</li>
+                <li>Low support in Django</li>
+                <li>Either slow or unreliable for writing operations</li>
+                <li>Some of these technologies are too new</li>
+              </ul>
+            </small>
+  
+          </section>
+        </section>
+        <section >
+          <section >
+            <h2>Choosing the technology <small>[2017]</small></h2>
+            <small>
+            <table>
+              <tr>
+                <td></td>
+                <td><img data-src="img/solr_logo.svg"  width="400px"/></td>
+                <td><img data-src="img/elastic_logo.svg" width="400px"/></td>
+                <td><img data-src="img/clickhouse_logo.png" width="400px"/></td>
+                <td><img data-src="img/postgresql_logo.png" width="400px"/></td>
+              </tr>
+              <tr>
+                <td><b>Type</b></td>
+                <td>Search</td>
+                <td>Search</td>
+                <td>Column DB</td>
+                <td>Column DB (plugin)</td>
+              </tr>
+              <tr>
+                <td><b>Interface</b></td>
+                <td>HTTP</td>
+                <td>HTTP</td>
+                <td>HTTP</td>
+                <td>ODBC, JDBC</td>
+              </tr>
+              <tr>
+                <td><b>Query Language</b></td>
+                <td>Lucene (extended)</td>
+                <td>Lucene (extended)</td>
+                <td>SQL (subset)</td>
+                <td>SQL</td>
+              </tr>
+              <tr>
+                <td><b>Aggregations</b></td>
+                <td>Facets</td>
+                <td>Aggregations</td>
+                <td>SQL</td>
+                <td>SQL</td>
+              </tr>
+              <tr>
+                <td><b>JSON support</b></td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>N/A</td>
+              </tr>
+              <tr>
+                <td><b>Type of server</b></td>
+                <td>Java</td>
+                <td>Java</td>
+                <td>Native</td>
+                <td>Native</td>
+              </tr>
+            </table>
+          </small>
+          </section>
+          <section >
+            <h2>Data set <small>[2017]</small></h2>
+            <p><b>Number of documents:</b> 340,480,753</p>
+            <div class="stats">
+              <div>
+                <b>Entry</b> (154,154)<br/>
+                <table>
+                  <tr><td>InterPro</td> <td>29,965</td></tr>
+                  <tr><td>Panther</td> <td>86,618</td></tr>
+                  <tr><td>ProDom</td> <td>1,844</td></tr>
+                  <tr><td>Smart</td> <td>1,312</td></tr>
+                  <tr><td>Pfam</td> <td>16,282</td></tr>
+                  <tr><td>TIGRFAMs</td> <td>4,488</td></tr>
+                  <tr><td>CDD</td> <td>11,005</td></tr>
+                  <tr><td>HAMAP</td> <td>2,087</td></tr>
+                  <tr><td>Merops</td> <td>1,115</td></tr>
+                </table>
+              </div>
+              <div>
+                <b>Protein</b> (60,604,408)<br/>
+                <table>
+                  <tr><td>Swiss-Prot</td> <td>536,539</td></tr>
+                  <tr><td>TrEMBL</td> <td>60,095,598</td></tr>
+                </table>
+              </div>
+              <div>
+                <b>Structure</b> (115,743)<br/>
+                <table>
+                  <tr><td>PDB</td> <td>115,743</td></tr>
+                </table>
+              </div>
+          </div>
+          </section>
+          <section >
+            <h2>Queries</h2>
+            <small>
+              <p><b>Filter</b>:
+                <ol>
+                  <li>All documents</li>
+                  <li>Swissprot proteins</li>
+                  <li>Trembl proteins</li>
+                  <li>Specific accession</li>
+                  <li>With a structure</li>
+                  <li>Specific structure</li>
+                  <li>Unintegrated entries</li>
+                </ol>
+              </p>
+              <p><b>Actions</b>:
+                <ol>
+                  <li>group by entry_db and count</li>
+                  <li>group by entry_db and count unique</li>
+                  <li>group by protein_db and count unique</li>
+                  <li>get unique entries</li>
+                  <li>get unique entries (plus filter)</li>
+                </ol>
+              </p>
+            </small>
+            <img data-src="img/query.jpg"  width="50%"/>
+  
+          </section>
+        </section>
+        <section >
+          <section >
+            <h2>Overall Results</h2>
+            <small>
+              <table>
+                <tr>
+                  <td></td>
+                  <td><img data-src="img/solr_logo.svg"  width="400px"/></td>
+                  <td><img data-src="img/elastic_logo.svg" width="400px"/></td>
+                  <td><img data-src="img/clickhouse_logo.png" width="400px"/></td>
+                  <td><img data-src="img/postgresql_logo.png" width="400px"/></td>
+                </tr>
+                <tr>
+                  <td><b>Number of tests</b></td>
+                  <td>35</td>
+                  <td>35</td>
+                  <td>35</td>
+                  <td>30</td>
+                </tr>
+                  <td><b>Total Execution Time (min)</b></td>
+                  <td>6.03</td>
+                  <td>2.89</td>
+                  <td>2.68</td>
+                  <td>287.60</td>
+                </tr>
+              </table>
+            </small>
+          </section>
+          <section >
+            <h2>Comparison - First run</h2>
+            <img data-src="img/comparison_1st.png" />
+          </section>
+          <section >
+            <h2>Comparison - Second run</h2>
+            <img data-src="img/comparison_2nd.png" />
+          </section>
+          <section>
+                <h2>Elasticsearch</h2>
+                <ul>
+                  <li>Second Fastest First run</li>
+                  <li>Best in second run</li>
+                  <li>Big community</li>
+                  <li>Some EBI projects already use it.</li>
+                  <li>Easy development after having an API prototype working with Solr</li>
+          </section>        
+        </section>
+
+        <section>
+          <h2>Current set up.</h2>
+        </section>
+        <section>
+          <section>
+            <h2>How are we using it. Loading & Querying.</h2>
+          </section>
+          <section
+          data-background-iframe="https://www.ebi.ac.uk/interpro/entry/InterPro/#table"
+          data-background-interactive
+        >
+          <div class="over-demo">
+            <h2>InterPro7</h2>
+            <p>https://www.ebi.ac.uk/interpro/</p>
+            <div>
+              <ul>
+                <li>Group by + counts</li>
+                <li>Unique accessions after filtering</li>
+                <li>IDA search</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        </section>
+        <section>
+          <h2>What help we would like to have.</h2>
+          <h5>Optimization</h5>
+          <ul>
+            <li>Is our mapping and type selection the best choice?</li>
+            <li>Is our sharding/replicate strategy the best we can do?</li>
+            <li>How can we improve performance of our queries?</li>
+            <li>How can we improve performance of our release procedures?</li>
+            <li>Can we have more machines?</li>
+          </ul>
+        </section>
+
+        <section
+          data-background="https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif"
+          class="ebi-bg"
+        >
+          <h2>Thanks!!!</h2>
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: false,
+        controlsLayout: "edges",
+
+        transition: "convex", // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+          {
+            src: "lib/js/classList.js",
+            condition: function () {
+              return !document.body.classList;
+            },
+          },
+          {
+            src: "plugin/markdown/marked.js",
+            condition: function () {
+              return !!document.querySelector("[data-markdown]");
+            },
+          },
+          {
+            src: "plugin/markdown/markdown.js",
+            condition: function () {
+              return !!document.querySelector("[data-markdown]");
+            },
+          },
+          {
+            src: "plugin/highlight/highlight.js",
+            async: true,
+            callback: function () {
+              hljs.initHighlightingOnLoad();
+            },
+          },
+          { src: "plugin/zoom-js/zoom.js", async: true },
+          { src: "plugin/notes/notes.js", async: true },
+        ],
+      });
+    </script>
+  </body>
+</html>
