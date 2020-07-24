@@ -233,7 +233,7 @@
                 <li>Some of these technologies are too new</li>
               </ul>
             </small>
-  
+
           </section>
         </section>
         <section >
@@ -351,7 +351,7 @@
               </p>
             </small>
             <img data-src="img/query.jpg"  width="50%"/>
-  
+
           </section>
         </section>
         <section >
@@ -398,16 +398,114 @@
                   <li>Big community</li>
                   <li>Some EBI projects already use it.</li>
                   <li>Easy development after having an API prototype working with Solr</li>
-          </section>        
+          </section>
         </section>
 
         <section>
-          <h2>Current set up.</h2>
+          <section>
+            <h2>Elasticsearch in a nutshell</h2>
+            <p>
+              Elasticsearch is a <i>distributed</i> search engine.
+              <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">An Elasticsearch <i>cluster</i> is composed of one or more <i>nodes</i>.</span>
+            </p>
+            <p>
+              Indices and documents in place of tables and rows.
+              <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">In Elasticsearch, information is stored as JSON <i>documents</i> within <i>indices</i>.</span>
+            </p>
+            <p>
+              An index is broken into <i>shards</i>.
+              <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">Shards are distributed across the cluster. Horizontal scalling for the win!</span>
+            </p>
+            <p>
+              Shards are replicated on different nodes.
+              <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">If a node goes down, the whole index is still available as replicas of the shards were made on other nodes.</span>
+            </p>
+          </section>
+          <section>
+            <h2>InterPro: Elasticsearch cluster</h2>
+            <img style="display: inline-block; width: 35%;" data-src="img/server.svg">
+            <div style="display: inline-block; width: 60%; vertical-align: top; margin-top: 20px;">
+              One cluster in HL, one in HX.<br>
+              Three nodes (VMs) per cluster:
+              <ul>
+                <li>CPUs: 8</li>
+                <li>Mem: 32 GB</li>
+                <li>Storage: 2 TB (SSD-like)</li>
+                <li>
+                  System config
+                  <ul>
+                    <li>Swap disabled</li>
+                    <li>65k open file descriptions</li>
+                    <li>250k+ mapped memory areas (virtual memory)</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </section>
+          <section>
+            <h2>InterPro: Indices, shards, replicas</h2>
+            <div>
+              InterPro integrates 14 member databases.
+              <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">We create one ES index per member database.</span>
+            </div>
+            <div>
+              Most indices have five shards.
+              <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">But the four largest have ten.</span>
+            </div>
+            <div>
+              One shard = one replica
+              <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">Replicates are created once all documents have been indexed.</span>
+            </div>
+          </section>
         </section>
+
         <section>
           <section>
-            <h2>How are we using it. Loading & Querying.</h2>
+            <h2>Preparing documents</h2>
+            One LSF job writes files to the EBI filesystem. Each file contains 100k documents.
+            <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">1.6b documents; 16k files; 115GB; 30 hours</span>
           </section>
+          <section>
+            <h2>Indexing documents</h2>
+            Two other LSF jobs index (send) documents to Elastic clusters in two passes:
+            <ol style="color: rgba(0,0,0,.7); font-size: 30px;">
+              <li>First pass: read files as they are being generated and attempt to index documents. Failed documents are saved in new files.</li>
+              <li>Second pass: read files containing failed documents, and try again. When all documents in one file have been indexed, the file is deleted. When all files have been deleted, all documents have been indexed.</li>
+            </ol>
+            <div style="margin-top: 1em;">
+              <div style="width: 50%; text-align: center; display: inline-block;">
+                <span style="border-bottom: 4px #21ba45 solid; width: 100%; display: block">HX cluster</span>
+                48 hours
+              </div>
+              <div style="width: 48%; text-align: center; display: inline-block;">
+                <span style="border-bottom: 4px #00b5ad solid; width: 100%; display: block;">HL cluster</span>
+                100 hours
+              </div>
+            </div>
+          </section>
+          <section>
+            <h2>Making data live</h2>
+            <span style="color: #72AD46; margin: -30px 0 0 30px; display: block;">without downtime</span>
+            <p>
+              InterPro 80.0 is live. We're about to release InterPro 81.0
+              <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">Let's assume we have four indices: <code style="border: solid 1px #eee; font-size: 75%; padding: 2px 5px; color: rgba(219, 40, 40, .75);">cdd80</code>, <code style="border: solid 1px #eee; font-size: 75%; padding: 2px 5px; color: rgba(219, 40, 40, .75);">pfam80</code>, <code style="border: solid 1px #eee; font-size: 75%; padding: 2px 5px; color: rgba(219, 40, 40, .75);">cdd81</code>, and <code style="border: solid 1px #eee; font-size: 75%; padding: 2px 5px; color: rgba(219, 40, 40, .75);">pfam81</code>.</span>
+            </p>
+
+            <p>
+              Elasticsearch supports index aliases
+              <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">An alias is a soft link to one or more indexes, e.g. <code style="border: solid 1px #eee; font-size: 75%; padding: 2px 5px; color: rgba(219, 40, 40, .75);">live</code> points to <code style="border: solid 1px #eee; font-size: 75%; padding: 2px 5px; color: rgba(219, 40, 40, .75);">cdd80</code> and <code style="border: solid 1px #eee; font-size: 75%; padding: 2px 5px; color: rgba(219, 40, 40, .75);">pfam80</code>, and <code style="border: solid 1px #eee; font-size: 75%; padding: 2px 5px; color: rgba(219, 40, 40, .75);">next</code> points to <code style="border: solid 1px #eee; font-size: 75%; padding: 2px 5px; color: rgba(219, 40, 40, .75);">cdd81</code> and <code style="border: solid 1px #eee; font-size: 75%; padding: 2px 5px; color: rgba(219, 40, 40, .75);">pfam81</code></span>
+            </p>
+
+            <p>
+              Swap aliases in one, atomic operation
+              <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">
+                We remove the <code style="border: solid 1px #eee; font-size: 75%; padding: 2px 5px; color: rgba(219, 40, 40, .75);">live</code> alias from <code style="border: solid 1px #eee; font-size: 75%; padding: 2px 5px; color: rgba(219, 40, 40, .75);">cdd80</code> and <code style="border: solid 1px #eee; font-size: 75%; padding: 2px 5px; color: rgba(219, 40, 40, .75);">pfam80</code>, and add it to <code style="border: solid 1px #eee; font-size: 75%; padding: 2px 5px; color: rgba(219, 40, 40, .75);">cdd81</code> and <code style="border: solid 1px #eee; font-size: 75%; padding: 2px 5px; color: rgba(219, 40, 40, .75);">pfam81</code>.
+              </span>
+            </p>
+          </section>
+        </section>
+
+        <section>
           <section
           data-background-iframe="https://www.ebi.ac.uk/interpro/entry/InterPro/#table"
           data-background-interactive
