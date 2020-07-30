@@ -43,8 +43,8 @@
       img.opening-logo {
         width: 25vw;
         position: absolute;
-        top: 53vh;
-        left: 71%;
+        top: 41vh;
+        left: 66%;
       }
       .reveal h1,
       .reveal h2,
@@ -184,12 +184,16 @@
       <div class="slides">
         <section data-background="css/theme/ebi/bg_gears.png" class="ebi-bg">
           <h2><i>Elasticsearch</i> in InterPro</h2>
-          <p>https://www.ebi.ac.uk/interpro/</p>
+          <p><a href="https://www.ebi.ac.uk/interpro/" style="color:darkturquoise;">https://www.ebi.ac.uk/interpro/</a></p>
+          <div style="color:goldenrod; font-size: 0.8em;">
+            Gustavo A. Salazar<br/>
+            Matthias Blum
+          </div>
           <img src="./img/logo_lightblue.svg" class="opening-logo" />
         </section>
         <section >
           <section >
-            <h2>Data organization</h2>
+            <h2>API Data organization</h2>
             <p>First attempt: <b>MySQL</b></p>
             <img data-src="img/mysql_attempt.png" width="60%"/>
             <small style="width: 34%; display: inline-block;margin-left: 1em;">
@@ -403,26 +407,7 @@
 
         <section>
           <section>
-            <h2>Elasticsearch in a nutshell</h2>
-            <p>
-              Elasticsearch is a <i>distributed</i> search engine.
-              <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">An Elasticsearch <i>cluster</i> is composed of one or more <i>nodes</i>.</span>
-            </p>
-            <p>
-              Indices and documents in place of tables and rows.
-              <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">In Elasticsearch, information is stored as JSON <i>documents</i> within <i>indices</i>.</span>
-            </p>
-            <p>
-              An index is broken into <i>shards</i>.
-              <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">Shards are distributed across the cluster. Horizontal scalling for the win!</span>
-            </p>
-            <p>
-              Shards are replicated on different nodes.
-              <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">If a node goes down, the whole index is still available as replicas of the shards were made on other nodes.</span>
-            </p>
-          </section>
-          <section>
-            <h2>InterPro: Elasticsearch cluster</h2>
+            <h2>InterPro: Elasticsearch cluster <small>[2020]</small></h2>
             <img style="display: inline-block; width: 35%;" data-src="img/server.svg">
             <div style="display: inline-block; width: 60%; vertical-align: top; margin-top: 20px;">
               One cluster in HL, one in HX.<br>
@@ -430,7 +415,7 @@
               <ul>
                 <li>CPUs: 8</li>
                 <li>Mem: 32 GB</li>
-                <li>Storage: 2 TB (SSD-like)</li>
+                <li>Storage: 2 TB (High Performance)</li>
                 <li>
                   System config
                   <ul>
@@ -460,13 +445,19 @@
         </section>
 
         <section>
+          <h2>Release procedure</h2>
           <section>
-            <h2>Preparing documents</h2>
+            <div class="fullslide">
+              <img src="./img/Release.png" />
+            </div>
+          </section>
+          <section>
+            <h4>Preparing documents</h4>
             One LSF job writes files to the EBI filesystem. Each file contains 100k documents.
             <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">1.6b documents; 16k files; 115GB; 30 hours</span>
           </section>
           <section>
-            <h2>Indexing documents</h2>
+            <h4>Indexing documents</h4>
             Two other LSF jobs index (send) documents to Elastic clusters in two passes:
             <ol style="color: rgba(0,0,0,.7); font-size: 30px;">
               <li>First pass: read files as they are being generated and attempt to index documents. Failed documents are saved in new files.</li>
@@ -484,7 +475,7 @@
             </div>
           </section>
           <section>
-            <h2>Making data live</h2>
+            <h4>Making data live</h4>
             <span style="color: #72AD46; margin: -30px 0 0 30px; display: block;">without downtime</span>
             <p>
               InterPro 80.0 is live. We're about to release InterPro 81.0
@@ -504,9 +495,7 @@
             </p>
           </section>
         </section>
-
-        <section>
-          <section
+        <section
           data-background-iframe="https://www.ebi.ac.uk/interpro/entry/InterPro/#table"
           data-background-interactive
         >
@@ -523,7 +512,6 @@
           </div>
         </section>
 
-        </section>
         <section>
           <h2>What help we would like to have.</h2>
           <h5>Optimization</h5>
@@ -531,9 +519,10 @@
             <li>Is our mapping and type selection the best choice?</li>
             <li>Is our sharding/replicate strategy the best we can do?</li>
             <li>How can we improve performance of our queries?</li>
-            <li>How can we improve performance of our release procedures?</li>
-            <li>Can we have more machines?</li>
+            <li>How can we improve performance of our release procedures?<br/></li>
+            
           </ul>
+          <p class="fragment">Can we have more machines?</p>
         </section>
 
         <section
@@ -542,6 +531,26 @@
         >
           <h2>Thanks!!!</h2>
         </section>
+        <section>
+          <h2>Elasticsearch in a nutshell</h2>
+          <p>
+            Elasticsearch is a <i>distributed</i> search engine.
+            <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">An Elasticsearch <i>cluster</i> is composed of one or more <i>nodes</i>.</span>
+          </p>
+          <p>
+            Indices and documents in place of tables and rows.
+            <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">In Elasticsearch, information is stored as JSON <i>documents</i> within <i>indices</i>.</span>
+          </p>
+          <p>
+            An index is broken into <i>shards</i>.
+            <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">Shards are distributed across the cluster. Horizontal scalling for the win!</span>
+          </p>
+          <p>
+            Shards are replicated on different nodes.
+            <span style="color: rgba(0,0,0,.7); display: block; font-size: 30px;">If a node goes down, the whole index is still available as replicas of the shards were made on other nodes.</span>
+          </p>
+        </section>
+
       </div>
     </div>
 
