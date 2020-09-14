@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>HCA Tech lead application</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"
+    />
+
+    <link rel="stylesheet" href="css/reveal.css" />
+    <link rel="stylesheet" href="css/theme/ebi.css" id="theme" />
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css" />
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.type = "text/css";
+      link.href = window.location.search.match(/print-pdf/gi)
+        ? "css/print/pdf.css"
+        : "css/print/paper.css";
+      document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
+
+    <!--[if lt IE 9]> <script src="lib/js/html5shiv.js"></script> <![endif]-->
+    <style type="text/css">
+      .reveal section img {
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+      img.opening-logo {
+        width: 25vw;
+        position: absolute;
+        top: 45vh;
+        left: 73%;
+      }
+      .reveal h1,
+      .reveal h2,
+      .reveal h3,
+      .reveal h4,
+      .reveal h5 {
+        text-transform: capitalize;
+      }
+      .reveal h1 a,
+      .reveal h2 a,
+      .reveal h3 a,
+      .reveal h4 a,
+      .reveal h5 a {
+        text-transform: lowercase;
+      }
+      .flowline {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .fullslide {
+        height: 60vh;
+      }
+      .half {
+        height: 30vh;
+      }
+      .third {
+        height: 20vh;
+        font-size: 0.9em;
+      }
+      .fourth {
+        height: 16vh;
+        font-size: 0.8em;
+      }
+      .fifth {
+        height: 12vh;
+        font-size: 0.8em;
+      }
+      .reveal section img.icon {
+        height: 0.6em;
+        margin: 0;
+        padding-bottom: 0.1em;
+      }
+      .box {
+        display: inline-block;
+        text-align: center;
+      }
+      .centered {
+        width: 100%;
+        text-align: center;
+      }
+      div.box img {
+        margin: 0;
+      }
+      div.box footer {
+        line-height: 0.3;
+        margin-bottom: 1em;
+      }
+      ul {
+        font-size: 0.9em;
+        width: 100%;
+      }
+      ul {
+        font-size: 0.8em;
+      }
+      .photos {
+        margin-top: 1em;
+      }
+      div.box img.photo {
+        border: 2px solid red;
+        border-radius: 50%;
+        width: 5vh;
+        margin: 3px;
+      }
+      .over-demo {
+        position: absolute;
+        width: 40%;
+        right: 0;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5), 0 5px 25px rgba(0, 0, 0, 0.2);
+        background-color: rgba(0, 0, 0, 0.9);
+        color: #fff;
+        padding: 20px;
+        font-size: 20px;
+        text-align: left;
+      }
+
+      .server {
+        margin-right: 1em;
+        margin-left: 1em;
+        line-height: 0;
+      }
+      .reveal section .server > img {
+        margin: 0;
+      }
+      table.flowchart,
+      table.flowchart tr,
+      table.flowchart tr td {
+        border: 0;
+      }
+      table.flowchart td {
+        text-align: center;
+        min-width: 200px;
+      }
+      table.flowchart img {
+        margin:0;
+      }
+      .api-vms {
+        background-color: #cccccc;
+      }
+      .api-vms footer{
+        font-size: 0.6em;
+        font-weight: bold;
+        color: #338333;
+        padding: 0 1em 0;
+      }
+      .flex-row {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        align-items: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-background="css/theme/ebi/bg_cells.png" class="ebi-bg">
+          <h2>Human Cell Atlas Technical Lead Application</i></h2>
+          <p>Gustavo A. Salazar</p>
+          <br/>
+          <h3 style="text-transform: none;">
+            <small>
+              Project you have worked on which had rapidly evolving requirements, and how you worked with developers and stakeholders to deliver high quality products in the shortest possible timeframe.
+            </small>
+          </h3>
+        </section>
+      <!-- <section data-markdown>
+        ## Outline
+
+        1. 🔲Introduction to chosen project 
+        2. 🔲Specific example
+        2. 🔲High level view
+      </section> -->
+      <section>
+        <section
+          data-background-iframe="https://www.ebi.ac.uk/interpro/entry/InterPro/#table"
+          data-background-interactive
+        >
+          <div class="over-demo">
+            <h2>InterPro7</h2>
+            <p>https://www.ebi.ac.uk/interpro/</p>
+          </div>
+        </section>
+        <section>
+          <table class="third flowchart">
+            <tr>
+              <td></td>
+              <td></td>
+              <td>
+                <div style="display: flex; margin-left: 130px;">
+                  <div class="server">
+                    <img src="./img/server.svg" width="100px" />
+                    <div><small>Client VMs</small></div>
+                  </div>
+                  <div>
+                    <img
+                      src="./img/arrow.png"
+                      width="50px"
+                      style="transform: rotate(180deg);"
+                    /><img src="./img/js_logos.png" width="100px" />
+                  </div>
+                </div>
+                <img
+                  src="./img/arrow.png"
+                  width="50px"
+                  style="transform: rotate(90deg);"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td><img src="./img/user.png" width="150px" /></td>
+              <td><img src="./img/arrow.png" width="50px" /></td>
+              <td>
+                <img src="./img/newinterpro.png" width="200px" />
+                <footer><span>InterPro Client</span><br /></footer>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>
+                <img
+                  src="./img/arrow.png"
+                  width="50px"
+                  style="transform: rotate(-90deg);"
+                />
+                <div style="display: flex; margin-left: 130px;">
+                  <div class="server">
+                    <img src="./img/server.svg" width="100px" />
+                    <div><small>API VMs</small></div>
+                  </div>
+                  <div>
+                  <div style="display: flex;">
+                    <img
+                      src="./img/arrow.png"
+                      width="50px"
+                      height="40px"
+                      style="transform: rotate(180deg);"
+                    />              
+                    <div style="display: flex; flex-direction: column;">
+                      <img src="./img/python-logo.png" style="width: 100px;" />
+                      <img src="./img/django-logo.png" style="width: 100px;" />
+                      <img src="./img/drf-logo.png" style="width: 100px;" />
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </section>
+        <section data-markdown>
+          ## Dev Team
+
+          We use scrum as our agile methodology for development.
+
+          * Project owner: Team leader
+          * Scrum master: Alternates between members of the dev team
+          * Dev team:
+            * Web team (3-4 people)
+            * Production team (3-4 people)
+
+        </section>
+
+        <section data-markdown>
+          ## Other Stakeholders
+          * EBI collaborators
+            * EBI infrastructure
+            * Nightingale (ProtVista)
+          * External collaborators
+            * Member databases
+            * Others. e.g. Genome 3D  
+          * Users        
+        </section>
+      </section>
+      <section>
+        <section data-markdown>
+          ## Example requirement
+
+          1. Provide programatic access to InterPro data.
+            * URL design.
+            * API technologies
+            * _Data storage_
+              * From relational models to a star design.
+            * ...
+        </section>
+        <section >
+          <h2>API Data organization</h2>
+          <img data-src="img/mysql_attempt.png" width="50%"/>
+          <img data-src="img/doc_store_attempt.png" width="40%" class="fragment"/>
+        </section>
+        <section >
+          <h2>Benchmarking of technologies</h2>
+          <img data-src="img/comparison_1st.png" />
+       </section>
+        <section data-markdown>
+          ## Design and deployment - Team effort
+
+          1. Model definition (Web team).
+          2. Infrastructure design (Web + Production team).
+          3. VM provision and setup (EBI webprod + Production team)
+          4. Release pipeline (Production team).
+          5. API production (Web team).
+        </section>
+        <section>
+          <h3>Ensuring High quality</h3>
+          <p>⚠️ Response times were too long for the Web</p>
+          <p class="fragment">✅ Server caching using redis.</p>
+        </section>
+      </section>
+      <section>
+
+        <section data-markdown>
+          ## Global Requirements
+
+          #### Static
+          * Legacy website
+            * Main Objective: Create a modern website, API powered, that covers all the functionality of the existing site.
+          
+          #### Evolving
+          * Curators
+            * First level of user testing.
+            * Have the best understanding of the Data
+          * Users
+            * RT tickets
+
+        </section>
+
+
+        <section data-markdown>
+          ## Ensuring High Quality
+
+          ### Testing
+          * Client
+            * Unit tests
+            * Type tests
+            * Lint
+            * Web performance
+            * UX
+          * API
+            * Unit tests
+            * Functional tests
+        </section>
+        <section >
+          <h3>Meeting the deadlines</h3>
+          <ul>
+            <li>Long term<br/>
+              <small>Grants for the project</small>
+            </li>
+            <li>Short term<br/>
+              <small>Bi-monthly release schedule</small>
+            </li>
+          </ul>
+        </section>
+      </section>
+  
+        <section data-background="css/theme/ebi/bg_cells.png" class="ebi-bg">
+            <h2>Thanks!! 👍🏼</h2>
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: false,
+        controlsLayout: "edges",
+
+        transition: "convex", // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+          {
+            src: "lib/js/classList.js",
+            condition: function () {
+              return !document.body.classList;
+            },
+          },
+          {
+            src: "plugin/markdown/marked.js",
+            condition: function () {
+              return !!document.querySelector("[data-markdown]");
+            },
+          },
+          {
+            src: "plugin/markdown/markdown.js",
+            condition: function () {
+              return !!document.querySelector("[data-markdown]");
+            },
+          },
+          {
+            src: "plugin/highlight/highlight.js",
+            async: true,
+            callback: function () {
+              hljs.initHighlightingOnLoad();
+            },
+          },
+          { src: "plugin/zoom-js/zoom.js", async: true },
+          { src: "plugin/notes/notes.js", async: true },
+        ],
+      });
+    </script>
+  </body>
+</html>
