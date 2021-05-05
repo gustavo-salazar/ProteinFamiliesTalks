@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="css/reveal.css" />
+    <link rel="stylesheet" href="css/theme/ebi.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css" />
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.type = "text/css";
+      link.href = window.location.search.match(/print-pdf/gi)
+        ? "css/print/pdf.css"
+        : "css/print/paper.css";
+      document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
+    <style>
+      div.container h3,
+      div.container h2 {
+        text-transform: none;
+      }
+      .container section img {
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+      img.opening-logo {
+        width: 25vw;
+        position: absolute;
+        top: 35vh;
+        left: 73%;
+      }
+      .container .flex-row {
+        display: flex;
+        align-items: baseline;
+      }
+      .container .reduced{
+        font-size: 0.8em;
+      }
+
+      div.container div.img-with-credits {
+        line-height: 0%;
+        text-align: end;
+      }
+      div.container div.img-with-credits a {
+        text-decoration: none;
+        font-size: 0.6em;
+        color: lightslategray;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="reveal container">
+      <div class="slides">
+        <section
+          data-background="css/theme/ebi/bg_atoms.png"
+          class="ebi-bg"
+        >
+          <h2>Django REST framework </h2>
+          
+          <h4>  Gustavo A. Salazar</h4>
+          <img src="./img/drf-logo.png" class="opening-logo" style="top:55vh; background-color: rgba(255,255,255,0.5);"/>
+          <img src="./img/django-logo.png" class="opening-logo"/>
+        </section>
+        <section data-markdown>
+          ## Introduction
+
+          A How-To introductory talk on implementing and deploying a REST API 
+          using the Django REST Framework (DRF). It will cover the model defined
+          by Django, and how it has been extended in DRF. By the end of the session
+          we will have created a local API with a simple endpoint. 
+          
+          It will include a discussion on how a React App (or any other JavaScript
+          Framework app) can interact with the developed API.
+        </section>
+        <section>
+          <section data-markdown>
+            ## An API
+
+            __API__: Application programming interface
+
+            ```txt
+                [ Software/Hardware ]
+                      ||    /\
+                      ||    ||
+            Question  ||    || Answer
+                      ||    ||
+                      \/    ||
+                [ Software/Hardware ]
+            ```
+          </section>
+          <section data-markdown>
+            ## A REST API
+
+            __REST__: Representational State Transfer
+
+            ```txt
+               [ Client ]
+                ||    /\
+                ||    ||
+            URL ||    || File
+                ||    ||
+                \/    ||
+               [ Server ]
+            ```
+          </section>
+          <section data-markdown>
+            ## A REST API
+
+            Uses a subset of HTTP as communication protocol
+              * HTTP methods for CRUD operations
+                * _Create_ => `POST`
+                * _Read_ => `GET`
+                * _Update_ => `PUT`
+                * _Delete_ => `DELETE`
+              * HTTP status codes (e.g. 200 OK, 404 Not Found)
+              * The format of the file is usually JSON, but it could be any other.
+          </section>
+        </section>
+        <section>
+          <section >
+            <div data-markdown>
+              ## So, let's make one of those
+
+              ### Lyrics API
+
+              Let's create an API where I can get the lyrics of a song I like.
+
+              ```txt
+                 [ Client ]
+                  ||    /\
+                  ||    ||
+              URL ||    || Response
+                  ||    ||
+                  \/    ||
+                 [ Server ]
+              ```
+            </div>
+            <ul>
+              <li class="fragment">URL: <code>/api/queen/bicycle race</code></li>
+              <li class="fragment">Response: <code>I want to ride my bycicle...</code></li>
+            </ul>
+  
+          </section>
+          <section >
+            <h5>Technology Stack</h5>
+            <div class="flex-row">
+            <div style="display:flex; flex-direction:column-reverse">
+              <img src="./img/python-logo.png" style="width:50vh" class="fragment"/>
+              <img src="./img/django-logo.png" style="width:50vh" class="fragment"/>
+              <img src="./img/drf-logo.png" style="width:50vh"class="fragment"/>
+            </div>
+            <img src="./img/sqlite_logo.gif" class="fragment"/>
+          </div>
+          </section>
+        </section>
+        <section>
+          <section >
+            <h5><img src="./img/python-logo.png" style="height:2em" /></h5>
+            <div data-markdown>
+              Make sure you are using Python3
+              ```bash
+              $ python --version
+              Python 3.6.13
+              ```
+              Create a Virtual environment:
+              ```bash
+              $ mkdir lyrics
+              $ cd lyrics
+              $ python -m venv virtualenv
+              $ source virtualenv/bin/activate
+              ```
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/python-logo.png" style="height:2em" /></h5>
+            <div data-markdown>
+              Install our dependencies
+              ```bash
+              $ pip install Django==3.1
+              $ pip install djangorestframework==3.12.4
+              $ python -m django --version
+              3.1
+              ```
+            </div>
+          </section>
+        </section>
+        <section >
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div>
+              <p>Designed to make common Web-development tasks fast and easy.</p>
+              <div class="reduced">
+                <p>Some of the things included in Django:</p>
+                <ul>
+                  <li>An opinionated Model-View-Controller web framework</li>
+                  <li>
+                    An Object-Relational mapping with support to multiple DBs.
+                  </li>
+                  <li>Template System</li>
+                  <li>Development Server</li>
+                  <li>Generation of Admin Interfaces</li>
+                  <li>Support for testing</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div data-markdown>
+              Create a django project
+              ```bash
+              $ django-admin startproject django4lyrics
+              $ cd django4lyrics
+              $ find .          
+              .
+              ./manage.py
+              ./django4lyrics
+                ./django4lyrics/__init__.py
+                ./django4lyrics/settings.py
+                ./django4lyrics/urls.py
+                ./django4lyrics/wsgi.py
+                ./django4lyrics/asgi.py
+              ```
+            </div>
+            <div data-markdown class="fragment">
+              Which you can test in the dev server
+              ```bash
+              $ python manage.py runserver
+              Django version 3.1, using settings 'django4lyrics.settings'
+              Starting development server at http://127.0.0.1:8000/
+              Quit the server with CONTROL-C.
+              ```
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div data-markdown>
+              Create an App in this project
+              ```bash
+              $ python manage.py startapp www
+              $ cd www
+              $ find www 
+              .
+              ./__init__.py 
+              ./apps.py
+              ./models.py
+              ./migrations
+                ./migrations/__init__.py
+              ./admin.py
+              ./tests.py
+              ./views.py
+              ```
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div class="img-with-credits">
+              <img src="./img/django-overview.jpg" />
+              <a href="https://www.theturninggear.com/2018/10/22/djangos-architectural-pattern/" >https://www.theturninggear.com/2018/10/22/djangos-architectural-pattern/</a>
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div data-markdown>
+              Lets create the first View in `www/views.py`
+              ```python
+              from django.http import HttpResponse
+
+              def index(request):
+                  return HttpResponse("This is the Index of the Lyrics website.")
+              ```
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div data-markdown>
+              Wiring the URLs in 2 parts.
+
+              First create the URL for the App `www/urls.py`
+              ```python
+              from django.urls import path
+
+              from . import views
+              
+              urlpatterns = [
+                  path('', views.index, name='index'),
+              ]
+              ```
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div data-markdown>
+              And then include the URLs of the app www into the project `django4lyrics/urls.py`
+              ```python
+              from django.contrib import admin
+              from django.urls import include, path
+              
+              urlpatterns = [
+                  path('www/', include('www.urls')),
+                  path('admin/', admin.site.urls),
+              ]                ```
+            </div>
+            <div data-markdown class="fragment">
+              Test it the dev server http://127.0.0.1:8000/
+              ```bash
+              $ python manage.py runserver
+              Django version 3.1, using settings 'django4lyrics.settings'
+              Starting development server at http://127.0.0.1:8000/
+              Quit the server with CONTROL-C.
+              ```
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div data-markdown>
+              Let's create a unit test for that View in
+              `www/tests.py`
+              ```python
+              from django.test import TestCase
+              from django.urls import reverse
+
+              class IndexViewTests(TestCase):
+                  def test_response_from_index(self):
+                      response = self.client.get(reverse('index'))
+                      self.assertEqual(response.status_code, 200)
+                      self.assertContains(response, "Lyrics")
+              ```
+            </div>
+            <div data-markdown class="fragment">
+              And to run the tests
+              ```bash
+              $ python manage.py test
+              Creating test database for alias 'default'...
+              System check identified no issues (0 silenced).
+              .
+              ----------------------------------------------------------------------
+              Ran 1 test in 0.006s
+              
+              OK
+              Destroying test database for alias 'default'...              
+              ```
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div data-markdown>
+              ### Databases
+              
+              As a database we will be using SQLite, which is set by deafult in django. If you 
+              want to setup another DB, the place to deal with it is `django4lyrics/settings.py`.
+              
+              ___
+
+              Django offers official support to PostgreSQL, MariaDB, MySQL, Oracle and SQLite.
+
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div data-markdown>
+              ### Models - ORM
+              
+              A Django model contains the essential fields and behaviors of the data you’re storing.
+              
+              ___
+
+              Defining the model of an App in Django consists in creating classes that inherit 
+              from `django.db.models.Model` in the `models.py` of your app.
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div data-markdown>
+              #### Models for our example
+              
+              The minimun data we need to have in our DB to be able to display the lyrics of a song is:
+              * Artist name
+              * Song name
+              * Lyrics
+
+              We could represent this in different ways, for example a single model with everyting as 
+              an attribute, or multiple interconected models. 
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div data-markdown>
+              #### Models for our example
+              I'll define models for Artist and Song in `www/models.py`:
+              ```python
+              from django.db import models
+
+              class Artist(models.Model):
+                  name = models.CharField(max_length=200)
+
+
+              class Song(models.Model):
+                  artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+                  name = models.CharField(max_length=200)
+                  lyrics = models.TextField()
+
+              ```
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div data-markdown>
+              In order to start using our model, our app (e.g. www) has to be plugged in the 
+              project(e.g. django4lyrics). We need to add a reference to its 
+              configuration class in the `INSTALLED_APPS` setting (e.g. `django4lyrics/settings.py`). 
+              ```python
+              # ...
+              INSTALLED_APPS = [
+                  'www.apps.WwwConfig',
+                  'django.contrib.admin',
+                  'django.contrib.auth',
+                  'django.contrib.contenttypes',
+                  'django.contrib.sessions',
+                  'django.contrib.messages',
+                  'django.contrib.staticfiles',
+              ]
+              # ...
+              ```   
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div data-markdown>
+              And now we can inform django that we have made changes into our model.
+              ```bash
+              $ python manage.py makemigrations 
+              Migrations for 'www':
+                www/migrations/0001_initial.py
+                  - Create model Artist
+                  - Create model Song
+              ```
+            </div>
+            <div data-markdown class="fragment">
+              And to reflect those changes in the DB:
+              ```bash
+              $ python manage.py migrate       
+              Operations to perform:
+                Apply all migrations: admin, auth, contenttypes, sessions, www
+              Running migrations:
+                Applying contenttypes.0001_initial... OK
+                ...
+                Applying www.0001_initial... OK
+              $ ls
+              db.sqlite3    django4lyrics manage.py     www
+              ```
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div data-markdown>
+              Let's create some initial data. First create a fixtures file in `www/fixtures.js`:
+              ```json
+              [
+                {
+                  "model": "www.Artist",
+                  "fields": { "id": 1, "name": "queen" }
+                },
+                {
+                  "model": "www.Song",
+                  "fields": {
+                    "id": 1,
+                    "artist": 1,
+                    "name": "bycicle race",
+                    "lyrics": "Bicycle, bicycle, bicycle\nI want to ride my\nBicycle, bicycle, bicycle\nI want to ride my bicycle\nI want to ride my bike\nI want to ride my bicycle\nI want to ride it where I like"
+                  }
+                }
+              ]
+              ```
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div data-markdown>
+              Now we can use the `loaddata` command from `manage.py`.
+
+              ```bash
+              $  python manage.py loaddata www/fixtures.json
+              Installed 2 object(s) from 1 fixture(s)
+              ```
+            </div>
+          </section>
+          <section >
+            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+            <div data-markdown>
+              And finally we can use the model to build our views. 
+              So, lets update the view we created to show how many songs are in our DB:
+
+              ```python
+              from django.http import HttpResponse
+              from www.models import Song
+
+              def index(request):
+                  return HttpResponse(
+                    f"This Lyrics website has {Song.objects.count()} songs.")
+              ```
+            </div>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
+            <div data-markdown>
+              The Django REST Framwork (DRF) is a toolkit for building Web APIs extending Django.
+
+              Some features included in DRF are:
+              * Predifined Serializers, Viewsets, Routers and Renderers
+              * Web browsable API
+              * Hyperlinked APIs
+            </div>
+          </section>
+          <section>
+            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
+            <div data-markdown>
+              Lets create a new app in our django project for the API.
+              ```bash
+              python manage.py startapp api
+              ```
+            </div>
+            <div data-markdown class="fragment">
+              And include DRF in the `INSTALLED_APPS` in `django4lyrics/settings.py`
+              ```python
+              INSTALLED_APPS = [
+                  ...
+                  'rest_framework',
+              ]
+              ```
+            </div>
+          </section>
+          <section>
+            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
+            <div data-markdown>
+              DRF adds support for automatic URL routing to Django
+            </div>
+            <div data-markdown class="fragment">
+              Here is how to use it to define the URLs of our API. `api/urls.py`
+              ```python
+              from django.urls import include, path
+              from rest_framework import routers
+              from . import views
+
+              router = routers.DefaultRouter()
+              router.register(r'artists', views.ArtistViewSet)
+
+              urlpatterns = [
+                  path('', include(router.urls)),
+              ]
+              ```
+            </div>
+          </section>
+          <section>
+            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
+            <div data-markdown>
+              DRF extends the concept of Views into Viewsets, that predefine the RESTful actions (GET, POST, PUT, DELETE).
+
+            </div>
+            <div data-markdown class="fragment">
+              Here is how to create a viewset for artists. `api/views.py`
+              ```python
+              from rest_framework import viewsets
+              from www.models import Artist
+              from . import serializers
+              
+              class ArtistViewSet(viewsets.ModelViewSet):
+                  queryset = Artist.objects.all()
+                  serializer_class = serializers.ArtistSerializer
+              ```
+            </div>
+          </section>
+          <section>
+            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
+            <div data-markdown>
+              Serializers allow complex data such as querysets and model instances to be converted to native Python datatypes.
+
+            </div>
+            <div data-markdown class="fragment">
+              And here is how to create the needed serializer for artists. `api/serializers.py`
+              ```python
+              from rest_framework import serializers
+              from www.models import Artist
+              
+              class ArtistSerializer(serializers.ModelSerializer):
+                  class Meta:
+                      model = Artist
+                      fields = ['id', 'name']
+              ```
+            </div>
+          </section>
+          <section>
+            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
+            <div data-markdown>
+             That completes our first REST endpoint now accessible from http://127.0.0.1:8000/api/
+              ```bash
+              $ python manage.py runserver
+              ```
+            </div>
+            <img src="./img/drf-demo.png" style="width:60%"/>
+          </section>
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: false,
+        controlsLayout: "edges",
+        fragments: true,
+
+        markdown: {
+          smartypants: true,
+        },
+        dependencies: [
+          { src: "plugin/markdown/marked.js" },
+          { src: "plugin/markdown/markdown.js" },
+          { src: "plugin/notes/notes.js", async: true },
+          {
+            src: "plugin/highlight/highlight.js",
+            async: true,
+            callback: function () {
+              hljs.initHighlightingOnLoad();
+            },
+          },
+        ],
+      });
+    </script>
+  </body>
+</html>
