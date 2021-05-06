@@ -26,9 +26,18 @@
       document.getElementsByTagName("head")[0].appendChild(link);
     </script>
     <style>
+      div.container h5,
+      div.container h4,
       div.container h3,
       div.container h2 {
         text-transform: none;
+        margin: 5px 0;
+      }
+      div.container h5 img {
+        margin: 0;
+      }
+      div.container p {
+        margin: 5px 0;
       }
       .container section img {
         border: 0;
@@ -58,6 +67,13 @@
         font-size: 0.6em;
         color: lightslategray;
       }
+      div.container pre code {
+        max-height: 500px;
+      }
+      div.container .landing a {
+        font-size: 2rem;
+        color: whitesmoke;
+      }
 
     </style>
   </head>
@@ -66,10 +82,10 @@
       <div class="slides">
         <section
           data-background="css/theme/ebi/bg_atoms.png"
-          class="ebi-bg"
+          class="ebi-bg landing"
         >
           <h2>Django REST framework </h2>
-          
+          <a href="https://gustavo-salazar.github.io/ProteinFamiliesTalks/drf2021.html">https://gustavo-salazar.github.io/ProteinFamiliesTalks/drf2021.html</a>
           <h4>  Gustavo A. Salazar</h4>
           <img src="./img/drf-logo.png" class="opening-logo" style="top:55vh; background-color: rgba(255,255,255,0.5);"/>
           <img src="./img/django-logo.png" class="opening-logo"/>
@@ -149,8 +165,8 @@
               ```
             </div>
             <ul>
-              <li class="fragment">URL: <code>/api/queen/bicycle race</code></li>
-              <li class="fragment">Response: <code>I want to ride my bycicle...</code></li>
+              <li class="fragment">URL: <code>/api/lyrics/queen/bicycle race</code></li>
+              <li class="fragment">Response: <code>I want to ride my bicycle...</code></li>
             </ul>
   
           </section>
@@ -479,7 +495,7 @@
                   "fields": {
                     "id": 1,
                     "artist": 1,
-                    "name": "bycicle race",
+                    "name": "bicycle race",
                     "lyrics": "Bicycle, bicycle, bicycle\nI want to ride my\nBicycle, bicycle, bicycle\nI want to ride my bicycle\nI want to ride my bike\nI want to ride my bicycle\nI want to ride it where I like"
                   }
                 }
@@ -616,6 +632,118 @@
             <img src="./img/drf-demo.png" style="width:60%"/>
           </section>
         </section>
+        <section>
+          <section>
+            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
+            <h5>A more complex endpoint</h5>
+            <div data-markdown class="fragment">
+              `api/urls.py`
+              ```python
+              #...
+              urlpatterns = [
+                  path('', include(router.urls)),
+                  path(r'lyrics/&lt;str:artist>/&lt;str:song>', views.SongView.as_view())
+              ]
+              ```
+            </div>
+          </section>
+          <section>
+            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
+            <div data-markdown>
+              `api/views.py`
+              ```python
+              class SongView(GenericAPIView):
+                queryset = Song.objects.all()
+                serializer_class = serializers.SongSerializer
+          
+                def get(self, request, *args, **kwargs):
+                  try:
+                    artist = self.kwargs['artist']
+                    song = self.kwargs['song']
+                  except ValueError:
+                    raise Http404()
+                  q = self.get_queryset() \
+                    .filter(name=song) \
+                    .filter(artist__name=artist)
+                  if len(q) == 0:
+                    return Response(
+                      {"detail": f"The song [{song}] by [{artist}] was not found"}, 
+                      status=status.HTTP_404_NOT_FOUND
+                    )
+                  serializer = serializers.SongSerializer(q, many=True)
+                  return Response(serializer.data)
+              ```
+            </div>
+          </section>
+          <section>
+            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
+            <div data-markdown>
+              `api/serializers.py`
+              ```python
+              #...
+              class SongSerializer(serializers.ModelSerializer):
+                artist = serializers.StringRelatedField(many=False)
+                class Meta:
+                  model = Song
+                  fields = ['id', 'name', 'lyrics', 'artist' ]
+              ```
+              `www/models.py`
+              ```python
+              #...
+              class Artist(models.Model):
+                name = models.CharField(max_length=200)
+                def __str__(self):
+                  return self.name
+              #...
+              ```
+            </div>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h5>
+              <img src="./img/drf-logo.png" style="height:3em"/>
+              <img src="./img/react-logo.png" style="height:3em"/>
+            </h5>
+            <div data-markdown>
+              Back to the original question:
+
+              _How to do Django + React? Or any other JS framework_
+            </div>
+            <div data-markdown class="fragment">
+              2 major options:
+
+              1. React (SPA or components) in a Django App
+              2. React SPA completely independent of a Django REST API.
+            </div>
+          </section>
+          <section>
+            <h5>
+              <img src="./img/drf-logo.png" style="height:3em"/>
+              <img src="./img/react-logo.png" style="height:3em"/>
+            </h5>
+            <img src="./img/React_Django_Hybrid_Architecture.png"/>
+          </section>
+          <section>
+            <h5>
+              <img src="./img/drf-logo.png" style="height:3em"/>
+              <img src="./img/react-logo.png" style="height:3em"/>
+            </h5>
+            <img src="./img/React_Django_separated.png" />
+          </section>
+        </section>
+      <section
+        data-background="https://media.giphy.com/media/JVXU0uN1l6wdq/giphy.gif"
+        class="ebi-bg"
+      >
+      <div data-markdown>
+        Links:
+        * [Slides](https://gustavo-salazar.github.io/ProteinFamiliesTalks/drf2021.html)
+        * [Demo code](https://github.com/gustavo-salazar/drf-demo)
+      </div>
+        
+      </section>
+
       </div>
     </div>
 
