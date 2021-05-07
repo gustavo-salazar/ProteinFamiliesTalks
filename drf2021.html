@@ -68,7 +68,7 @@
         color: lightslategray;
       }
       div.container pre code {
-        max-height: 500px;
+        max-height: 450px;
       }
       div.container .landing a {
         font-size: 2rem;
@@ -89,17 +89,6 @@
           <h4>  Gustavo A. Salazar</h4>
           <img src="./img/drf-logo.png" class="opening-logo" style="top:55vh; background-color: rgba(255,255,255,0.5);"/>
           <img src="./img/django-logo.png" class="opening-logo"/>
-        </section>
-        <section data-markdown>
-          ## Introduction
-
-          A How-To introductory talk on implementing and deploying a REST API 
-          using the Django REST Framework (DRF). It will cover the model defined
-          by Django, and how it has been extended in DRF. By the end of the session
-          we will have created a local API with a simple endpoint. 
-          
-          It will include a discussion on how a React App (or any other JavaScript
-          Framework app) can interact with the developed API.
         </section>
         <section>
           <section data-markdown>
@@ -267,7 +256,6 @@
               Create an App in this project
               ```bash
               $ python manage.py startapp www
-              $ cd www
               $ find www 
               .
               ./__init__.py 
@@ -483,7 +471,7 @@
           <section >
             <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
             <div data-markdown>
-              Let's create some initial data. First create a fixtures file in `www/fixtures.js`:
+              Let's create some initial data. First create a fixtures file in `www/fixtures.json`:
               ```json
               [
                 {
@@ -645,6 +633,10 @@
                   path(r'lyrics/&lt;str:artist>/&lt;str:song>', views.SongView.as_view())
               ]
               ```
+              and remember to add the path below to `django4lyrics/urls.py`
+              ```python
+                path('api/', include('api.urls')),
+              ```
             </div>
           </section>
           <section>
@@ -652,6 +644,16 @@
             <div data-markdown>
               `api/views.py`
               ```python
+              from rest_framework import viewsets
+              from rest_framework.generics import GenericAPIView
+              from rest_framework.response import Response
+              from www.models import Artist, Song
+              from . import serializers
+              
+              class ArtistViewSet(viewsets.ModelViewSet):
+                  queryset = Artist.objects.all()
+                  serializer_class = serializers.ArtistSerializer
+                            
               class SongView(GenericAPIView):
                 queryset = Song.objects.all()
                 serializer_class = serializers.SongSerializer
@@ -697,6 +699,13 @@
               #...
               ```
             </div>
+          </section>
+          <section>
+            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
+            <p>
+             That completes the REST endpoint we were aiming to get today.
+            </p>
+            <img src="./img/drf-demo2.png" style="width:60%"/>
           </section>
         </section>
         <section>
