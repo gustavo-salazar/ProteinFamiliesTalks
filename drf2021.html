@@ -296,11 +296,10 @@
               First create the URL for the App `www/urls.py`
               ```python
               from django.urls import path
-
               from . import views
               
               urlpatterns = [
-                  path('', views.index, name='index'),
+                path('', views.index, name='index'),
               ]
               ```
             </div>
@@ -314,8 +313,8 @@
               from django.urls import include, path
               
               urlpatterns = [
-                  path('www/', include('www.urls')),
-                  path('admin/', admin.site.urls),
+                path('www/', include('www.urls')),
+                path('admin/', admin.site.urls),
               ]                ```
             </div>
             <div data-markdown class="fragment">
@@ -338,10 +337,10 @@
               from django.urls import reverse
 
               class IndexViewTests(TestCase):
-                  def test_response_from_index(self):
-                      response = self.client.get(reverse('index'))
-                      self.assertEqual(response.status_code, 200)
-                      self.assertContains(response, "Lyrics")
+                def test_response_from_index(self):
+                  response = self.client.get(reverse('index'))
+                  self.assertEqual(response.status_code, 200)
+                  self.assertContains(response, "Lyrics")
               ```
             </div>
             <div data-markdown class="fragment">
@@ -409,13 +408,13 @@
               from django.db import models
 
               class Artist(models.Model):
-                  name = models.CharField(max_length=200)
+                name = models.CharField(max_length=200)
 
 
               class Song(models.Model):
-                  artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
-                  name = models.CharField(max_length=200)
-                  lyrics = models.TextField()
+                artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+                name = models.CharField(max_length=200)
+                lyrics = models.TextField()
 
               ```
             </div>
@@ -513,8 +512,8 @@
               from www.models import Song
 
               def index(request):
-                  return HttpResponse(
-                    f"This Lyrics website has {Song.objects.count()} songs.")
+                return HttpResponse(
+                  f"This Lyrics website has {Song.objects.count()} songs.")
               ```
             </div>
           </section>
@@ -566,8 +565,17 @@
               router.register(r'artists', views.ArtistViewSet)
 
               urlpatterns = [
-                  path('', include(router.urls)),
+                path('', include(router.urls)),
               ]
+              ```
+            </div>
+          </section>
+          <section>
+            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
+            <div data-markdown>
+              Remember to add the path below to `django4lyrics/urls.py`
+              ```python
+                path('api/', include('api.urls')),
               ```
             </div>
           </section>
@@ -585,8 +593,8 @@
               from . import serializers
               
               class ArtistViewSet(viewsets.ModelViewSet):
-                  queryset = Artist.objects.all()
-                  serializer_class = serializers.ArtistSerializer
+                queryset = Artist.objects.all()
+                serializer_class = serializers.ArtistSerializer
               ```
             </div>
           </section>
@@ -603,9 +611,9 @@
               from www.models import Artist
               
               class ArtistSerializer(serializers.ModelSerializer):
-                  class Meta:
-                      model = Artist
-                      fields = ['id', 'name']
+                class Meta:
+                  model = Artist
+                  fields = ['id', 'name']
               ```
             </div>
           </section>
@@ -629,13 +637,9 @@
               ```python
               #...
               urlpatterns = [
-                  path('', include(router.urls)),
-                  path(r'lyrics/&lt;str:artist>/&lt;str:song>', views.SongView.as_view())
+                path('', include(router.urls)),
+                path(r'lyrics/&lt;str:artist>/&lt;str:song>', views.SongView.as_view())
               ]
-              ```
-              and remember to add the path below to `django4lyrics/urls.py`
-              ```python
-                path('api/', include('api.urls')),
               ```
             </div>
           </section>
@@ -644,15 +648,15 @@
             <div data-markdown>
               `api/views.py`
               ```python
-              from rest_framework import viewsets
+              from rest_framework import viewsets, status
               from rest_framework.generics import GenericAPIView
               from rest_framework.response import Response
               from www.models import Artist, Song
               from . import serializers
               
               class ArtistViewSet(viewsets.ModelViewSet):
-                  queryset = Artist.objects.all()
-                  serializer_class = serializers.ArtistSerializer
+                queryset = Artist.objects.all()
+                serializer_class = serializers.ArtistSerializer
                             
               class SongView(GenericAPIView):
                 queryset = Song.objects.all()
