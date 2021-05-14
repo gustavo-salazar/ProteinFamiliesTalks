@@ -330,37 +330,6 @@
           <section >
             <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
             <div data-markdown>
-              Let's create a unit test for that View in
-              `www/tests.py`
-              ```python
-              from django.test import TestCase
-              from django.urls import reverse
-
-              class IndexViewTests(TestCase):
-                def test_response_from_index(self):
-                  response = self.client.get(reverse('index'))
-                  self.assertEqual(response.status_code, 200)
-                  self.assertContains(response, "Lyrics")
-              ```
-            </div>
-            <div data-markdown class="fragment">
-              And to run the tests
-              ```bash
-              $ python manage.py test
-              Creating test database for alias 'default'...
-              System check identified no issues (0 silenced).
-              .
-              ----------------------------------------------------------------------
-              Ran 1 test in 0.006s
-              
-              OK
-              Destroying test database for alias 'default'...              
-              ```
-            </div>
-          </section>
-          <section >
-            <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
-            <div data-markdown>
               ### Databases
               
               As a database we will be using SQLite, which is set by deafult in django. If you 
@@ -403,16 +372,12 @@
             <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
             <div data-markdown>
               #### Models for our example
-              I'll define models for Artist and Song in `www/models.py`:
+              I'll define a single model for Lyrics in `www/models.py`:
               ```python
               from django.db import models
 
-              class Artist(models.Model):
-                name = models.CharField(max_length=200)
-
-
-              class Song(models.Model):
-                artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+              class Lyrics(models.Model):
+                artist = models.CharField(max_length=200)
                 name = models.CharField(max_length=200)
                 lyrics = models.TextField()
 
@@ -448,8 +413,7 @@
               $ python manage.py makemigrations 
               Migrations for 'www':
                 www/migrations/0001_initial.py
-                  - Create model Artist
-                  - Create model Song
+                  - Create model Lyrics
               ```
             </div>
             <div data-markdown class="fragment">
@@ -474,14 +438,10 @@
               ```json
               [
                 {
-                  "model": "www.Artist",
-                  "fields": { "id": 1, "name": "queen" }
-                },
-                {
-                  "model": "www.Song",
+                  "model": "www.Lyrics",
                   "fields": {
                     "id": 1,
-                    "artist": 1,
+                    "artist": "queen",
                     "name": "bicycle race",
                     "lyrics": "Bicycle, bicycle, bicycle\nI want to ride my\nBicycle, bicycle, bicycle\nI want to ride my bicycle\nI want to ride my bike\nI want to ride my bicycle\nI want to ride it where I like"
                   }
@@ -509,11 +469,11 @@
 
               ```python
               from django.http import HttpResponse
-              from www.models import Song
+              from www.models import Lyrics
 
               def index(request):
                 return HttpResponse(
-                  f"This Lyrics website has {Song.objects.count()} songs.")
+                  f"This Lyrics website has {Lyrics.objects.count()} songs.")
               ```
             </div>
           </section>
@@ -686,6 +646,7 @@
             <div data-markdown>
               `api/serializers.py`
               ```python
+              from www.models import Artist, Song
               #...
               class SongSerializer(serializers.ModelSerializer):
                 artist = serializers.StringRelatedField(many=False)
@@ -745,17 +706,182 @@
             <img src="./img/React_Django_separated.png" />
           </section>
         </section>
-      <section
-        data-background="https://media.giphy.com/media/JVXU0uN1l6wdq/giphy.gif"
-        class="ebi-bg"
-      >
-      <div data-markdown>
-        Links:
-        * [Slides](https://gustavo-salazar.github.io/ProteinFamiliesTalks/drf2021.html)
-        * [Demo code](https://github.com/gustavo-salazar/drf-demo)
-      </div>
-        
-      </section>
+        <section
+          data-background="https://media.giphy.com/media/JVXU0uN1l6wdq/giphy.gif"
+          class="ebi-bg"
+        >
+          <div data-markdown>
+            Links:
+            * [Slides](https://gustavo-salazar.github.io/ProteinFamiliesTalks/drf2021.html)
+            * [Demo code](https://github.com/gustavo-salazar/drf-demo)
+          </div>
+          
+        </section>
+        <section >
+          <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
+          <div data-markdown>
+            Let's create a unit test for that View in
+            `www/tests.py`
+            ```python
+            from django.test import TestCase
+            from django.urls import reverse
+
+            class IndexViewTests(TestCase):
+              def test_response_from_index(self):
+                response = self.client.get(reverse('index'))
+                self.assertEqual(response.status_code, 200)
+                self.assertContains(response, "Lyrics")
+            ```
+          </div>
+          <div data-markdown class="fragment">
+            And to run the tests
+            ```bash
+            $ python manage.py test
+            Creating test database for alias 'default'...
+            System check identified no issues (0 silenced).
+            .
+            ----------------------------------------------------------------------
+            Ran 1 test in 0.006s
+            
+            OK
+            Destroying test database for alias 'default'...              
+            ```
+          </div>
+        </section>
+        <section>
+          <h5><img src="./img/django-logo.png" style="height:2em"/>Alternative model</h5>
+          <section >
+            <div data-markdown>
+              #### Models for our example
+              I'll define models for Artist and Song in `www/models.py`:
+              ```python
+              from django.db import models
+
+              class Artist(models.Model):
+                name = models.CharField(max_length=200)
+
+
+              class Song(models.Model):
+                artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+                name = models.CharField(max_length=200)
+                lyrics = models.TextField()
+
+              ```
+            </div>
+          </section>
+          <section >
+            <div data-markdown>
+              #### Models for our example
+              I'll define models for Artist and Song in `www/models.py`:
+              ```python
+              from django.db import models
+
+              class Artist(models.Model):
+                name = models.CharField(max_length=200)
+
+
+              class Song(models.Model):
+                artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+                name = models.CharField(max_length=200)
+                lyrics = models.TextField()
+
+              ```
+            </div>
+          </section>
+          <section >
+            <div data-markdown>
+              In order to start using our model, our app (e.g. www) has to be plugged in the 
+              project(e.g. django4lyrics). We need to add a reference to its 
+              configuration class in the `INSTALLED_APPS` setting (e.g. `django4lyrics/settings.py`). 
+              ```python
+              # ...
+              INSTALLED_APPS = [
+                  'www.apps.WwwConfig',
+                  'django.contrib.admin',
+                  'django.contrib.auth',
+                  'django.contrib.contenttypes',
+                  'django.contrib.sessions',
+                  'django.contrib.messages',
+                  'django.contrib.staticfiles',
+              ]
+              # ...
+              ```   
+            </div>
+          </section>
+          <section >
+            <div data-markdown>
+              And now we can inform django that we have made changes into our model.
+              ```bash
+              $ python manage.py makemigrations 
+              Migrations for 'www':
+                www/migrations/0001_initial.py
+                  - Create model Artist
+                  - Create model Song
+              ```
+            </div>
+            <div data-markdown class="fragment">
+              And to reflect those changes in the DB:
+              ```bash
+              $ python manage.py migrate       
+              Operations to perform:
+                Apply all migrations: admin, auth, contenttypes, sessions, www
+              Running migrations:
+                Applying contenttypes.0001_initial... OK
+                ...
+                Applying www.0001_initial... OK
+              $ ls
+              db.sqlite3    django4lyrics manage.py     www
+              ```
+            </div>
+          </section>
+          <section >
+            <div data-markdown>
+              Let's create some initial data. First create a fixtures file in `www/fixtures.json`:
+              ```json
+              [
+                {
+                  "model": "www.Artist",
+                  "fields": { "id": 1, "name": "queen" }
+                },
+                {
+                  "model": "www.Song",
+                  "fields": {
+                    "id": 1,
+                    "artist": 1,
+                    "name": "bicycle race",
+                    "lyrics": "Bicycle, bicycle, bicycle\nI want to ride my\nBicycle, bicycle, bicycle\nI want to ride my bicycle\nI want to ride my bike\nI want to ride my bicycle\nI want to ride it where I like"
+                  }
+                }
+              ]
+              ```
+            </div>
+          </section>
+          <section >
+            <div data-markdown>
+              Now we can use the `loaddata` command from `manage.py`.
+
+              ```bash
+              $  python manage.py loaddata www/fixtures.json
+              Installed 2 object(s) from 1 fixture(s)
+              ```
+            </div>
+          </section>
+          <section >
+            <div data-markdown>
+              And finally we can use the model to build our views. 
+              So, lets update the view we created to show how many songs are in our DB:
+
+              ```python
+              from django.http import HttpResponse
+              from www.models import Song
+
+              def index(request):
+                return HttpResponse(
+                  f"This Lyrics website has {Song.objects.count()} songs.")
+              ```
+            </div>
+          </section>
+        </section>
 
       </div>
     </div>
