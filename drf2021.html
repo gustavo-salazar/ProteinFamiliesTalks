@@ -121,20 +121,6 @@
                [ Server ]
             ```
           </section>
-          <section data-markdown>
-            ## A REST API
-
-            Uses a subset of HTTP as communication protocol
-              * HTTP methods for CRUD operations
-                * _Create_ => `POST`
-                * _Read_ => `GET`
-                * _Update_ => `PUT`
-                * _Delete_ => `DELETE`
-              * HTTP status codes (e.g. 200 OK, 404 Not Found)
-              * The format of the file is usually JSON, but it could be any other.
-          </section>
-        </section>
-        <section>
           <section >
             <div data-markdown>
               ## So, let's make one of those
@@ -144,13 +130,14 @@
               Let's create an API where I can get the lyrics of a song I like.
 
               ```txt
-                 [ Client ]
-                  ||    /\
-                  ||    ||
-              URL ||    || Response
-                  ||    ||
-                  \/    ||
-                 [ Server ]
+                     [ Client ]
+                      ||    /\
+                URL   ||    ||
+                 +    ||    ||
+               HTTP   ||    || Response
+              Method  ||    ||
+                      \/    ||
+                     [ Server ]
               ```
             </div>
             <ul>
@@ -649,39 +636,6 @@
             <img src="./img/drf-demo2.png" style="width:60%"/>
           </section>
         </section>
-        <section>
-          <section>
-            <h5>
-              <img src="./img/drf-logo.png" style="height:3em"/>
-              <img src="./img/react-logo.png" style="height:3em"/>
-            </h5>
-            <div data-markdown>
-              Back to the original question:
-
-              _How to do Django + React? Or any other JS framework_
-            </div>
-            <div data-markdown class="fragment">
-              2 major options:
-
-              1. React (SPA or components) in a Django App
-              2. React SPA completely independent of a Django REST API.
-            </div>
-          </section>
-          <section>
-            <h5>
-              <img src="./img/drf-logo.png" style="height:3em"/>
-              <img src="./img/react-logo.png" style="height:3em"/>
-            </h5>
-            <img src="./img/React_Django_Hybrid_Architecture.png"/>
-          </section>
-          <section>
-            <h5>
-              <img src="./img/drf-logo.png" style="height:3em"/>
-              <img src="./img/react-logo.png" style="height:3em"/>
-            </h5>
-            <img src="./img/React_Django_separated.png" />
-          </section>
-        </section>
         <section
           data-background="https://media.giphy.com/media/JVXU0uN1l6wdq/giphy.gif"
           class="ebi-bg"
@@ -693,7 +647,7 @@
           </div>
           
         </section>
-        <section >
+      <section >
           <h5><img src="./img/django-logo.png" style="height:2em"/></h5>
           <div data-markdown>
             Let's create a unit test for that View in
@@ -869,7 +823,40 @@
               ```
             </div>
           </section>
-        </section>
+          <section>
+            <section>
+              <h5>
+                <img src="./img/drf-logo.png" style="height:3em"/>
+                <img src="./img/react-logo.png" style="height:3em"/>
+              </h5>
+              <div data-markdown>
+                Back to the original question:
+  
+                _How to do Django + React? Or any other JS framework_
+              </div>
+              <div data-markdown class="fragment">
+                2 major options:
+  
+                1. React (SPA or components) in a Django App
+                2. React SPA completely independent of a Django REST API.
+              </div>
+            </section>
+            <section>
+              <h5>
+                <img src="./img/drf-logo.png" style="height:3em"/>
+                <img src="./img/react-logo.png" style="height:3em"/>
+              </h5>
+              <img src="./img/React_Django_Hybrid_Architecture.png"/>
+            </section>
+            <section>
+              <h5>
+                <img src="./img/drf-logo.png" style="height:3em"/>
+                <img src="./img/react-logo.png" style="height:3em"/>
+              </h5>
+              <img src="./img/React_Django_separated.png" />
+            </section>
+          </section>
+          </section>
 
       </div>
     </div>
