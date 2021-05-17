@@ -522,7 +522,7 @@
               from . import views
 
               router = routers.DefaultRouter()
-              router.register(r'artists', views.ArtistViewSet)
+              router.register(r'lyrics', views.LyricsViewSet)
 
               urlpatterns = [
                 path('', include(router.urls)),
@@ -549,12 +549,12 @@
               Here is how to create a viewset for artists. `api/views.py`
               ```python
               from rest_framework import viewsets
-              from www.models import Artist
+              from www.models import Lyrics
               from . import serializers
               
-              class ArtistViewSet(viewsets.ModelViewSet):
-                queryset = Artist.objects.all()
-                serializer_class = serializers.ArtistSerializer
+              class LyricsViewSet(viewsets.ModelViewSet):
+                queryset = Lyrics.objects.all()
+                serializer_class = serializers.LyricsSerializer
               ```
             </div>
           </section>
@@ -568,12 +568,12 @@
               And here is how to create the needed serializer for artists. `api/serializers.py`
               ```python
               from rest_framework import serializers
-              from www.models import Artist
+              from www.models import Lyrics
               
-              class ArtistSerializer(serializers.ModelSerializer):
+              class LyricsSerializer(serializers.ModelSerializer):
                 class Meta:
-                  model = Artist
-                  fields = ['id', 'name']
+                  model = Lyrics
+                  fields = ['id', 'artist', 'name', 'lyrics']
               ```
             </div>
           </section>
@@ -598,7 +598,7 @@
               #...
               urlpatterns = [
                 path('', include(router.urls)),
-                path(r'lyrics/&lt;str:artist>/&lt;str:song>', views.SongView.as_view())
+                path(r'lyrics/&lt;str:artist>/&lt;str:song>', views.LyricsView.as_view())
               ]
               ```
             </div>
@@ -611,16 +611,16 @@
               from rest_framework import viewsets, status
               from rest_framework.generics import GenericAPIView
               from rest_framework.response import Response
-              from www.models import Artist, Song
+              from www.models import Lyrics
               from . import serializers
               
-              class ArtistViewSet(viewsets.ModelViewSet):
-                queryset = Artist.objects.all()
-                serializer_class = serializers.ArtistSerializer
+              class LyricsViewSet(viewsets.ModelViewSet):
+                queryset = Lyrics.objects.all()
+                serializer_class = serializers.LyricsSerializer
                             
-              class SongView(GenericAPIView):
-                queryset = Song.objects.all()
-                serializer_class = serializers.SongSerializer
+              class LyricsView(GenericAPIView):
+                queryset = Lyrics.objects.all()
+                serializer_class = serializers.LyricsSerializer
           
                 def get(self, request, *args, **kwargs):
                   try:
@@ -630,38 +630,14 @@
                     raise Http404()
                   q = self.get_queryset() \
                     .filter(name=song) \
-                    .filter(artist__name=artist)
+                    .filter(artist=artist)
                   if len(q) == 0:
                     return Response(
                       {"detail": f"The song [{song}] by [{artist}] was not found"}, 
                       status=status.HTTP_404_NOT_FOUND
                     )
-                  serializer = serializers.SongSerializer(q, many=True)
+                  serializer = serializers.LyricsSerializer(q, many=True)
                   return Response(serializer.data)
-              ```
-            </div>
-          </section>
-          <section>
-            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
-            <div data-markdown>
-              `api/serializers.py`
-              ```python
-              from www.models import Artist, Song
-              #...
-              class SongSerializer(serializers.ModelSerializer):
-                artist = serializers.StringRelatedField(many=False)
-                class Meta:
-                  model = Song
-                  fields = ['id', 'name', 'lyrics', 'artist' ]
-              ```
-              `www/models.py`
-              ```python
-              #...
-              class Artist(models.Model):
-                name = models.CharField(max_length=200)
-                def __str__(self):
-                  return self.name
-              #...
               ```
             </div>
           </section>
@@ -790,52 +766,6 @@
           </section>
           <section >
             <div data-markdown>
-              In order to start using our model, our app (e.g. www) has to be plugged in the 
-              project(e.g. django4lyrics). We need to add a reference to its 
-              configuration class in the `INSTALLED_APPS` setting (e.g. `django4lyrics/settings.py`). 
-              ```python
-              # ...
-              INSTALLED_APPS = [
-                  'www.apps.WwwConfig',
-                  'django.contrib.admin',
-                  'django.contrib.auth',
-                  'django.contrib.contenttypes',
-                  'django.contrib.sessions',
-                  'django.contrib.messages',
-                  'django.contrib.staticfiles',
-              ]
-              # ...
-              ```   
-            </div>
-          </section>
-          <section >
-            <div data-markdown>
-              And now we can inform django that we have made changes into our model.
-              ```bash
-              $ python manage.py makemigrations 
-              Migrations for 'www':
-                www/migrations/0001_initial.py
-                  - Create model Artist
-                  - Create model Song
-              ```
-            </div>
-            <div data-markdown class="fragment">
-              And to reflect those changes in the DB:
-              ```bash
-              $ python manage.py migrate       
-              Operations to perform:
-                Apply all migrations: admin, auth, contenttypes, sessions, www
-              Running migrations:
-                Applying contenttypes.0001_initial... OK
-                ...
-                Applying www.0001_initial... OK
-              $ ls
-              db.sqlite3    django4lyrics manage.py     www
-              ```
-            </div>
-          </section>
-          <section >
-            <div data-markdown>
               Let's create some initial data. First create a fixtures file in `www/fixtures.json`:
               ```json
               [
@@ -858,16 +788,6 @@
           </section>
           <section >
             <div data-markdown>
-              Now we can use the `loaddata` command from `manage.py`.
-
-              ```bash
-              $  python manage.py loaddata www/fixtures.json
-              Installed 2 object(s) from 1 fixture(s)
-              ```
-            </div>
-          </section>
-          <section >
-            <div data-markdown>
               And finally we can use the model to build our views. 
               So, lets update the view we created to show how many songs are in our DB:
 
@@ -878,6 +798,74 @@
               def index(request):
                 return HttpResponse(
                   f"This Lyrics website has {Song.objects.count()} songs.")
+              ```
+            </div>
+          </section>
+          <section>
+            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
+            <div data-markdown>
+              DRF adds support for automatic URL routing to Django
+            </div>
+            <div data-markdown class="fragment">
+              Here is how to use it to define the URLs of our API. `api/urls.py`
+              ```python
+              from django.urls import include, path
+              from rest_framework import routers
+              from . import views
+
+              router = routers.DefaultRouter()
+              router.register(r'artists', views.ArtistViewSet)
+
+              urlpatterns = [
+                path('', include(router.urls)),
+              ]
+              ```
+            </div>
+          </section>
+          <section>
+            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
+            <div data-markdown>
+              Remember to add the path below to `django4lyrics/urls.py`
+              ```python
+                path('api/', include('api.urls')),
+              ```
+            </div>
+          </section>
+          <section>
+            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
+            <div data-markdown>
+              DRF extends the concept of Views into Viewsets, that predefine the RESTful actions (GET, POST, PUT, DELETE).
+
+            </div>
+            <div data-markdown class="fragment">
+              Here is how to create a viewset for artists. `api/views.py`
+              ```python
+              from rest_framework import viewsets
+              from www.models import Artist
+              from . import serializers
+              
+              class ArtistViewSet(viewsets.ModelViewSet):
+                queryset = Artist.objects.all()
+                serializer_class = serializers.ArtistSerializer
+              ```
+            </div>
+          </section>
+          <section>
+            <h5><img src="./img/drf-logo.png" style="height:3em"/></h5>
+            <div data-markdown>
+              Serializers allow complex data such as querysets and model instances to be converted to native Python datatypes.
+
+            </div>
+            <div data-markdown class="fragment">
+              And here is how to create the needed serializer for artists. `api/serializers.py`
+              ```python
+              from rest_framework import serializers
+              from www.models import Artist
+              
+              class ArtistSerializer(serializers.ModelSerializer):
+                class Meta:
+                  model = Artist
+                  fields = ['id', 'name']
               ```
             </div>
           </section>
