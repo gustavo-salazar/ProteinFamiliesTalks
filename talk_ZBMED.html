@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>ZB MED Research talk</title>
+
+    <link rel="stylesheet" href="css/reveal.css" />
+    <link rel="stylesheet" href="css/theme/ebi.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css" />
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.type = "text/css";
+      link.href = window.location.search.match(/print-pdf/gi)
+        ? "css/print/pdf.css"
+        : "css/print/paper.css";
+      document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
+    <style>
+      div.container h5,
+      div.container h4,
+      div.container h3,
+      div.container h2 {
+        text-transform: none;
+        margin: 5px 0;
+      }
+      div.container h5 img {
+        margin: 0;
+      }
+      div.container p {
+        margin: 5px 0;
+      }
+      .container section img {
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+      img.opening-logo {
+        width: 25vw;
+        position: absolute;
+        top: 35vh;
+        left: 73%;
+      }
+      .flex-row {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .container .reduced {
+        font-size: 0.8em;
+      }
+
+      div.container div.img-with-credits {
+        line-height: 0%;
+        text-align: end;
+      }
+      div.container div.img-with-credits a {
+        text-decoration: none;
+        font-size: 0.6em;
+        color: lightslategray;
+      }
+      div.container pre code {
+        max-height: 450px;
+      }
+      div.container .landing a {
+        font-size: 2rem;
+        color: whitesmoke;
+      }
+      ul {
+        font-size: 0.8em;
+        width: 100%;
+      }
+
+      .flowline {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .fullslide {
+        height: 60vh;
+      }
+      .half {
+        height: 30vh;
+      }
+      .third {
+        height: 20vh;
+        font-size: 0.9em;
+      }
+      .fourth {
+        height: 16vh;
+        font-size: 0.8em;
+      }
+      .fifth {
+        height: 12vh;
+        font-size: 0.8em;
+      }
+      .over-demo {
+        position: absolute;
+        width: 40%;
+        right: 0;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5), 0 5px 25px rgba(0, 0, 0, 0.2);
+        background-color: rgba(0, 0, 0, 0.9);
+        color: #fff;
+        padding: 20px;
+        font-size: 20px;
+        text-align: left;
+      }
+      .server {
+        margin-right: 1em;
+        margin-left: 1em;
+        line-height: 0;
+      }
+
+      .reveal section img.icon {
+        height: 0.6em;
+        margin: 0;
+        padding-bottom: 0.1em;
+      }
+      .reveal section .server > img {
+        margin: 0;
+      }
+      table.flowchart,
+      table.flowchart tr,
+      table.flowchart tr td {
+        border: 0;
+      }
+      table.flowchart td {
+        text-align: center;
+        min-width: 200px;
+      }
+      table.flowchart img {
+        margin: 0;
+      }
+      .api-vms {
+        background-color: #cccccc;
+      }
+      .api-vms footer {
+        font-size: 0.6em;
+        font-weight: bold;
+        color: #338333;
+        padding: 0 1em 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal container">
+      <div class="slides">
+        <section data-background="css/theme/ebi/bg_atoms.png" class="ebi-bg">
+          <h2>InterPro <i>(Under the hood)</i></h2>
+          <p>
+            Gustavo A. Salazar<br />
+            <i>gsalazar@ebi.ac.uk</i>
+          </p>
+          <img src="./img/logo_lightblue.svg" class="opening-logo" />
+        </section>
+        <section data-background="img/worldmap.jpg">
+            <h4 style="color: ghostwhite;">Career Path</h4>
+        </section>
+        <section
+          data-background-iframe="https://www.ebi.ac.uk/interpro/beta/"
+          data-background-interactive
+        >
+          <div class="over-demo">
+            <h3>InterPro Web App</h3>
+            <p>InterPro is one of the most used EBI services.</p>
+          </div>
+        </section>
+        <section>
+          <section>
+            <h3>Simplest Case</h3>
+
+            <div class="flowline third">
+              <img src="./img/user.png" />
+              <img src="./img/arrow.png" style="height: 25%" />
+              <div class="box third">
+                <img src="./img/box.png" />
+                <footer><span>InterProScan</span><br /></footer>
+              </div>
+              <img src="./img/arrow.png" style="height: 25%" />
+              <img src="./img/iproscanresult.png" />
+            </div>
+          </section>
+          <section>
+            <h2>InterPro and its member DBs</h2>
+            <div class="fullslide"><img src="./img/memberDBs.png" /></div>
+          </section>
+          <section>
+            <h2><img src="./img/box.png" class="icon" /> InterProScan</h2>
+            <ul>
+              <li>Current version: InterProScan <b>5.52-86.0</b></li>
+              <li>
+                Requirements:
+                <ul>
+                  <li>64-bit Linux</li>
+                  <li>Perl 5 (default on most Linux distributions)</li>
+                  <li>Python 3 (InterProScan 5.30-69.0 onwards)</li>
+                  <li>
+                    Oracle's Java JDK/JRE version 8 (InterProScan 5.17-56.0
+                    onwards)
+                  </li>
+                </ul>
+              </li>
+              <li>Supports master/worker <b>parallelisation</b> mode</li>
+              <li>Web Production runs InterProScan as a <b>web service</b></li>
+            </ul>
+          </section>
+          <section
+            data-background="https://media.giphy.com/media/yvzK4m2EoIKs9K0GoF/giphy.gif"
+            class="ebi-bg"
+          >
+            <h2>Repeat for each protein!</h2>
+          </section>
+        </section>
+
+        <section>
+          <h3>InterPro High level view</h3>
+          <div class="flowline centered third">
+            <div class="box third">
+              <img src="./img/box.png" />
+              <footer>Production</footer>
+            </div>
+            <img src="./img/arrow.png" style="height: 25%" />
+            <div class="box third">
+              <img src="./img/box.png" />
+              <footer>Curation</footer>
+            </div>
+            <img src="./img/arrow.png" style="height: 25%" />
+            <div class="box third">
+              <img src="./img/box.png" />
+              <footer>Data Warehouse</footer>
+            </div>
+            <img src="./img/arrow.png" style="height: 25%" />
+            <div
+              class="box third"
+              style="background-color: darkturquoise; padding: 1em"
+            >
+              <img src="./img/box.png" />
+              <footer
+                style="background-color: darkturquoise; text-align: center"
+              >
+                Website
+              </footer>
+            </div>
+          </div>
+        </section>
+        <section>
+          <h2><img src="./img/box.png" class="icon" /> InterPro Web Client</h2>
+          <section>
+            <div class="flowline third">
+              <img src="./img/user.png" />
+              <img src="./img/arrow.png" style="height: 25%" />
+              <div class="box third">
+                <img src="./img/newinterpro.png" />
+                <footer><span>InterPro Client</span><br /></footer>
+              </div>
+            </div>
+          </section>
+          <section>
+            <h4>Single Page Application</h4>
+            <br />
+            <div>URL + Local data => App state => Webpage</div>
+            <br />
+            <div>
+              URL: eg. https://www.ebi.ac.uk/interpro/entry/interpro/ Local
+              data:
+              <ul>
+                <li>Settings: Local Storage</li>
+                <li>Cache: Session Storage</li>
+                <li>Jobs: IndexedDB</li>
+              </ul>
+            </div>
+          </section>
+
+          <section>
+            <div style="display: flex">
+              <ul>
+                <li>
+                  JavaScript Stack
+                  <ul>
+                    <li>ES2015+</li>
+                    <li>React</li>
+                    <li>Redux</li>
+                  </ul>
+                </li>
+                <li>
+                  Dev stack:
+                  <ul>
+                    <li>Webpack</li>
+                    <li>Babel</li>
+                    <li>Testing: Eslint, Flow, Jest, Puppeteer.</li>
+                    <li>Reports: Coverage, Lighthouse</li>
+                  </ul>
+                </li>
+                <li>
+                  Github Repo:
+                  <small
+                    >https://github.com/ProteinsWebTeam/interpro7-client</small
+                  >
+                </li>
+                <li>
+                  Github Actions:
+                  <img
+                    src="https://github.com/ProteinsWebTeam/interpro7-client/actions/workflows/test-build-report.yml/badge.svg"
+                  />
+                </li>
+              </ul>
+              <div>
+                <img src="./img/js_logos.png" width="60%" />
+              </div>
+            </div>
+          </section>
+          <section>
+            <div>
+              <h5>
+                <img
+                  src="img/nightingale_logo.svg"
+                  style="height: 1em; margin: 0"
+                />
+                Nightingale Web Components
+              </h4>
+              <a style="font-size: 1.3rem;" href="https://ebi-webcomponents.github.io/nightingale/">https://ebi-webcomponents.github.io/nightingale/</a>
+              <div style="display: flex">
+                <img src="./img/iproscanresult.png" style="height: 200px" />
+                <img src="./img/heatmap.png" style="height: 200px" />
+                <img src="./img/taxonomy_tree.png" style="height: 200px" />
+              </div>
+              <img src="./img/alignment.png" style="height: 200px" />
+            </div>
+          </section>
+          <section>
+            <h4>Release & Deployment</h4>
+            <div>
+              <p>⏲ Cron Job that creates the bundle overnight.</p>
+              <p>☁️ Runs in the cluster.</p>
+              <p>📑 Rsync the bundle to the VMs.</p>
+            </div>
+            <div style="display: flex">
+              <div class="server">
+                <img src="./img/server.svg" width="100px" />
+                <div>
+                  <small>London</small>
+                </div>
+              </div>
+
+              <div class="server">
+                <img src="./img/server.svg" width="100px" />
+                <div>
+                  <small>Hinxton</small>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+        <section>
+          <table class="third flowchart">
+            <tr>
+              <td></td>
+              <td></td>
+              <td>
+                <div style="display: flex; margin-left: 130px">
+                  <div class="server">
+                    <img src="./img/server.svg" width="100px" />
+                    <div><small>Client VMs</small></div>
+                  </div>
+                  <div>
+                    <img
+                      src="./img/arrow.png"
+                      width="50px"
+                      style="transform: rotate(180deg)"
+                    /><img src="./img/js_logos.png" width="100px" />
+                  </div>
+                </div>
+                <img
+                  src="./img/arrow.png"
+                  width="50px"
+                  style="transform: rotate(90deg)"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td><img src="./img/user.png" width="150px" /></td>
+              <td><img src="./img/arrow.png" width="50px" /></td>
+              <td>
+                <img src="./img/newinterpro.png" width="200px" />
+                <footer><span>InterPro Client</span><br /></footer>
+              </td>
+            </tr>
+          </table>
+        </section>
+        <section>
+          <h2><img src="./img/server.svg" class="icon" /> InterPro API</h2>
+          <section data-markdown>
+            #### A REST API  
+            
+            __API__: Application programming interface 
+            
+            __REST__: Representational State Transfer 
+            ```txt
+               [ Client ]
+                 || /\
+             URL || ||JSON
+                 || ||
+                 \/ ||
+               [ Server ]
+            ```
+          </section>
+          <section data-markdown>
+            https://www.ebi.ac.uk/interpro/api/
+            https://www.ebi.ac.uk/interpro/wwwapi/
+             
+            ---
+            ##### Endpoints
+            1. `/entry`
+            2. `/protein`
+            3. `/structure` 
+            4. `/taxonomy` 
+            5. `/proteome` 
+            6. `/set`
+          </section>
+          <section data-markdown>
+            #### URL structure
+            
+            All the endpoints follow the same structure.
+  
+            ---
+  
+            `/api/`**`[endpoint]/`** **`[database]/`** **`[accession]/`**  
+              
+            ---
+            ##### Example
+            [/api/entry/prosite/PS00673](https://www.ebi.ac.uk/interpro/api/entry/prosite/PS00673)
+  
+          </section>
+          <section>
+            <h4>Mixing endpoints</h4>
+  
+            <p><code>/api/</code> <b style="color:lightcoral">[ENDPOINT BLOCK]</b> / <b style="color:olive">[ENDPOINT BLOCK]</b> /</p>
+  
+            <ul>
+              <li>The first <b style="color:lightcoral">[ENDPOINT BLOCK]</b> defines the main endpoint and output of the response. </li>
+              
+              <li>Any other <b style="color:olive">[ENDPOINT BLOCK]</b> will be considered as a filter.</li>
+            </ul>
+          </section>
+          <section>
+            <h4>Mixing endpoints</h4>
+            <p>e.g. 
+              <a href="https://www.ebi.ac.uk/interpro/api/protein/uniprot/entry/interpro/IPR000126">
+                /api<span style="color:lightcoral">/protein/uniprot</span><span style="color:olive">/entry/interpro/IPR000126</span>
+              </a>
+            </p>
+  
+            <hr/>
+  
+            <p>Returns the list of uniprot proteins that are related (i.e. Have a match) with the interpro entry with accession <span style="color:olive">IPR000126</span>.</p>
+          </section>
+  
+          <section>
+
+            <div style="display: flex;">
+              <ul style="width: 60%;">
+                <li>
+                  Django Stack
+                  <ul>
+                    <li>Python3</li>
+                    <li>Django</li>
+                    <li>Django Rest Framework</li>
+                  </ul>
+                </li>
+                <li>
+                  Github Repo:
+                  <small
+                    >https://github.com/ProteinsWebTeam/interpro7-api</small
+                  >
+                </li>
+                <li>
+                  Github Actions:
+                  <img
+                    src="https://github.com/ProteinsWebTeam/interpro7-api/actions/workflows/testing.yml/badge.svg"
+                  />
+                </li>
+              </ul>
+              <div style="display: flex; flex-direction: column;">
+                <img src="./img/python-logo.png" style="width: 30vh;" />
+                <img src="./img/django-logo.png" style="width: 30vh;" />
+                <img src="./img/drf-logo.png" style="width: 30vh;" />
+              </div>
+            </div>
+          </section>
+          <section>
+            <h4>Release & Deployment</h4>
+            <div>
+
+              <p>⏲ Cron Job that creates the bundle overnight.</p>
+              <p>☁️ Runs in the cluster.</p>
+              <p>📑 Rsync the bundle to the VMs.</p>
+              <p>🦄 GUnicorn as Gateway Server</p>
+            </div>
+            <div class="flex-row">
+              <div class="api-vms" >
+                <div style="display: flex;">
+                  <div class="server">
+                  <img src="./img/server.svg" width="100px" />
+                  <div>
+                    <small>London</small>
+                  </div>
+                </div>
+  
+                <div class="server">
+                  <img src="./img/server.svg" width="100px" />
+                  <div>
+                    <small>Hinxton</small>
+                  </div>
+                </div>
+                </div> 
+                <footer>https://www.ebi.ac.uk/interpro/api/</footer>
+              </div>
+              <div class=" api-vms" >
+                <div style="display: flex;">
+                  <div class="server">
+                  <img src="./img/server.svg" width="100px" />
+                  <div>
+                    <small>London</small>
+                  </div>
+                </div>
+  
+                <div class="server">
+                  <img src="./img/server.svg" width="100px" />
+                  <div>
+                    <small>Hinxton</small>
+                  </div>
+                </div>
+                </div> 
+                <footer>https://www.ebi.ac.uk/interpro/wwwapi/</footer>
+              </div>
+            </div>
+          </section>
+        </section>
+        <section>
+          <table class="third flowchart">
+            <tr>
+              <td></td>
+              <td></td>
+              <td>
+                <div style="display: flex; margin-left: 130px;">
+                  <div class="server">
+                    <img src="./img/server.svg" width="100px" />
+                    <div><small>Client VMs</small></div>
+                  </div>
+                  <div>
+                    <img
+                      src="./img/arrow.png"
+                      width="50px"
+                      style="transform: rotate(180deg);"
+                    /><img src="./img/js_logos.png" width="100px" />
+                  </div>
+                </div>
+                <img
+                  src="./img/arrow.png"
+                  width="50px"
+                  style="transform: rotate(90deg);"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td><img src="./img/user.png" width="150px" /></td>
+              <td><img src="./img/arrow.png" width="50px" /></td>
+              <td>
+                <img src="./img/newinterpro.png" width="200px" />
+                <footer><span>InterPro Client</span><br /></footer>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>
+                <img
+                  src="./img/arrow.png"
+                  width="50px"
+                  style="transform: rotate(-90deg);"
+                />
+                <div style="display: flex; margin-left: 130px;">
+                  <div class="server">
+                    <img src="./img/server.svg" width="100px" />
+                    <div><small>API VMs</small></div>
+                  </div>
+                  <div>
+                  <div style="display: flex;">
+                    <img
+                      src="./img/arrow.png"
+                      width="50px"
+                      height="40px"
+                      style="transform: rotate(180deg);"
+                    />              
+                    <div style="display: flex; flex-direction: column;">
+                      <img src="./img/python-logo.png" style="width: 100px;" />
+                      <img src="./img/django-logo.png" style="width: 100px;" />
+                      <img src="./img/drf-logo.png" style="width: 100px;" />
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </section>
+        <section>
+          <h2><img src="./img/db.png" class="icon" /> Server Cache</h2>
+          <section>
+            <h5>Release Procedure</h5>
+            <ul>
+              <li>We use Redis.</li>
+              <li>The procedure takes around 1-2 days</li>
+              <li>3 phases:
+                <ol>
+                  <li>Get the URLs used from previous release</li>
+                  <li>Runs those URLs on the staging API machine (wp-np3-ac)</li>
+                  <li>Copies the cache file into the live Redis instance</li>
+                </ol>
+              </li>
+              <li>Once released, every new API query is saved in our cache.</li>
+            </ul>
+          </section>   
+        </section>
+        <section>
+          <table class="fourth flowchart">
+            <tr>
+              <td></td>
+              <td>
+                <div style="display: flex; margin-left: 130px;">
+                  <div class="server">
+                    <img src="./img/server.svg" width="80px" />
+                    <div><small>Client VMs</small></div>
+                  </div>
+                </div>
+                <img
+                  src="./img/arrow.png"
+                  width="30px"
+                  style="transform: rotate(90deg);"
+                />
+              </td>
+              <td class="flex-row">
+                <img
+                src="./img/arrow.png"
+                width="30px"
+                style="transform: rotate(180deg);"
+              /><img src="./img/js_logos.png" width="80px" />
+
+              </td>
+            </tr>
+            <tr>
+              <td class="flex-row"><img src="./img/user.png" width="150px" /><img src="./img/arrow.png" width="30px" /></td>
+              <td>
+                <img src="./img/newinterpro.png" width="200px" />
+                <footer><span>InterPro Client</span><br /></footer>
+              </td>
+              <td class="flex-row">
+                <img src="./img/arrow.png" width="30px" height="20px" style="transform: rotate(180deg);"/>
+                <img src="./img/cloud.png" width="120px" />
+                <div style="font-size: 0.6em;">
+                  <div>InterProScan</div>
+                  <div>EBI-search</div>
+                  <div>Geome3D</div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                <img
+                  src="./img/arrow.png"
+                  width="30px"
+                  style="transform: rotate(-90deg);"
+                />
+                <div style="display: flex; align-items: center;">
+                  <div class="server">
+                    <img src="./img/db.png" width="50px" />
+                    <div><small>Redis</small></div>
+                  </div>
+                  <img src="./img/arrow.png" width="30px" height="20px"/>
+
+                  <div class="server">
+                    <img src="./img/server.svg" width="80px" />
+                    <div><small>API VMs</small></div>
+                  </div>
+                  <div>
+                  <div style="display: flex; align-items: center;">
+                    <img
+                      src="./img/arrow.png"
+                      width="30px"
+                      height="20px"
+                      style="transform: rotate(180deg);"
+                    />              
+                    <div style="display: flex; flex-direction: column;">
+                      <img src="./img/python-logo.png" style="width: 80px;" />
+                      <img src="./img/django-logo.png" style="width: 80px;" />
+                      <img src="./img/drf-logo.png" style="width: 80px;" />
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                <img
+                  src="./img/arrow.png"
+                  width="30px"
+                  style="transform: rotate(-90deg);"
+                />
+                <div style="display: flex; margin-left: 65px;">
+                  <div class="server">
+                    <img src="./img/db.png" width="50px" />
+                    <div><small>MySQL</small></div>
+                  </div>
+                  <div class="server">
+                    <img src="./img/db.png" width="50px" />
+                    <div><small>ElasticSearch </small></div>
+                  </div>
+                </div>
+              </td>
+              <td></td>
+            </tr>
+          </table>
+        </section>
+        <section data-background="css/theme/ebi/bg_plants.png" class="ebi-bg">
+          <h2>Thanks!</h1>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: false,
+        controlsLayout: "edges",
+        fragments: true,
+
+        markdown: {
+          smartypants: true,
+        },
+        dependencies: [
+          { src: "plugin/markdown/marked.js" },
+          { src: "plugin/markdown/markdown.js" },
+          { src: "plugin/notes/notes.js", async: true },
+          {
+            src: "plugin/highlight/highlight.js",
+            async: true,
+            callback: function () {
+              hljs.initHighlightingOnLoad();
+            },
+          },
+        ],
+      });
+    </script>
+  </body>
+</html>
