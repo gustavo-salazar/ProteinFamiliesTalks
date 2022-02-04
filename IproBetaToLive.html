@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>InterPro - Beta to Live</title>
+
+    <link rel="stylesheet" href="css/reveal.css" />
+    <link rel="stylesheet" href="css/theme/ebi.css" id="theme" />
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css" />
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.type = "text/css";
+      link.href = window.location.search.match(/print-pdf/gi)
+        ? "css/print/pdf.css"
+        : "css/print/paper.css";
+      document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
+    <style>
+      div.container h5,
+      div.container h4,
+      div.container h3,
+      div.container h2 {
+        text-transform: none;
+        margin: 5px 0;
+      }
+      div.container h5 img {
+        margin: 0;
+      }
+      div.container p {
+        margin: 5px 0;
+      }
+      .container section img {
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+      img.opening-logo {
+        width: 25vw;
+        position: absolute;
+        top: 35vh;
+        left: 73%;
+      }
+      .flex-row {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .container .reduced {
+        font-size: 0.8em;
+      }
+
+      div.container div.img-with-credits {
+        line-height: 0%;
+        text-align: end;
+      }
+      div.container div.img-with-credits a {
+        text-decoration: none;
+        font-size: 0.6em;
+        color: lightslategray;
+      }
+      div.container pre code {
+        max-height: 450px;
+      }
+      div.container .landing a {
+        font-size: 2rem;
+        color: whitesmoke;
+      }
+      ul {
+        font-size: 0.8em;
+        width: 100%;
+      }
+
+      .flowline {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .fullslide {
+        height: 60vh;
+      }
+      .half {
+        height: 30vh;
+      }
+      .third {
+        height: 20vh;
+        font-size: 0.9em;
+      }
+      .fourth {
+        height: 16vh;
+        font-size: 0.8em;
+      }
+      .fifth {
+        height: 12vh;
+        font-size: 0.8em;
+      }
+      .over-demo {
+        position: absolute;
+        width: 40%;
+        right: 0;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5), 0 5px 25px rgba(0, 0, 0, 0.2);
+        background-color: rgba(0, 0, 0, 0.9);
+        color: #fff;
+        padding: 20px;
+        font-size: 20px;
+        text-align: left;
+      }
+      .server {
+        margin-right: 1em;
+        margin-left: 1em;
+        line-height: 0;
+      }
+
+      .reveal section img.icon {
+        height: 0.6em;
+        margin: 0;
+        padding-bottom: 0.1em;
+      }
+      .reveal section .server > img {
+        margin: 0;
+      }
+      table.flowchart,
+      table.flowchart tr,
+      table.flowchart tr td {
+        border: 0;
+      }
+      table.flowchart td {
+        text-align: center;
+        min-width: 200px;
+      }
+      table.flowchart img {
+        margin: 0;
+      }
+      .api-vms {
+        background-color: #cccccc;
+      }
+      .api-vms footer {
+        font-size: 0.6em;
+        font-weight: bold;
+        color: #338333;
+        padding: 0 1em 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal container">
+      <div class="slides">
+        <section data-background="css/theme/ebi/bg_atoms.png" class="ebi-bg">
+          <h2>InterPro <i>(From Beta to Live)</i></h2>
+          <p>
+            Gustavo A. Salazar<br />
+            <i>gsalazar@ebi.ac.uk</i>
+          </p>
+          <img src="./img/logo_lightblue.svg" class="opening-logo" />
+        </section>
+        <section
+          data-background-iframe="https://www.ebi.ac.uk/interpro/"
+          data-background-interactive
+        >
+          <div class="over-demo">
+            <h3>InterPro Web App</h3>
+            <p>Released on September 25th 2019.</p>
+          </div>
+        </section>
+        <section data-markdown>
+          ### What was new?
+
+          - InterPro Client
+            - ES2015 + React
+            - Single Page Application
+            - Functionality to browse data from different endpoints (e.g. protein, entry)
+            - Client cache
+            - Basic offline support
+            - Code splitting
+            - Minified and pre-compressed to optimise load.
+          - InterPro API and its databases.
+            - Python + Django
+            - MySQL as for main entities.
+            - Elastic search as a denormalised table
+            - Multiple endpoints
+          - Release procedures
+            - Python
+            - Reproducible
+            - Resumable
+        </section>
+        <section data-markdown>
+          ### Pre-release Day
+
+          - Website was on beta for almost a year
+            1. Link internally shared
+            2. Link on the website.
+            3. Users can choose to use it by default
+          - Multiple stress tests of the API
+          - Internal test days
+
+          ---
+
+          - Continuous development during this period
+            - Improvements on API (SD disks for ES)
+            - Usability issues
+            - Missing and improved features
+
+          ##### Listen to your curators!!!
+
+        </section>
+      <section
+        data-background="https://media.giphy.com/media/iVNJ47qaeZnUq8TLBH/giphy.gif"
+        class="ebi-bg"
+      >
+      </section>
+      <section data-markdown>
+        ### 1. Speed
+
+        The API wasn't ready to deal with the load (~3.5K users per day)
+
+        Our stress tests were not well designed. Their biggest problem: **All the request came from a single source.**
+
+      </section>
+      <section data-markdown>
+        ### 1. Speed (Solution)
+
+        - More and better API facing machines
+
+        - Improvements in the cache
+
+        ---
+        ![new server](https://www.pressstart.co.uk/images/easyblog_shared/September_2019/9-16-19/b2ap3_large_server_101536916_400.jpg)
+      </section>
+      <section data-markdown>
+        ### 2. Habits
+        Heavy users have routines, and a new website breaks their workflow. They don't like that.
+
+      </section>
+      <section data-markdown>
+        ### 2. Habits (Solution?)
+
+        You, as a developer are going to need a thick skin and patience to show the user the benefits of new features. 
+
+        ---
+
+        But be receptive as you might have missed something and that feedback might be showing you what.
+
+        ![Patience](https://media.giphy.com/media/j5oQQW3YArV0cVZowy/giphy.gif)
+      </section>
+      <section data-markdown>
+        ### 3. Careful what you wish for
+        Our users started using our API programatically 😀
+
+        It affected the performance of the website 😭
+
+      </section>
+      <section data-markdown>
+        ### 3. Careful what you wish for (Solution)
+
+        We have 2 internet facing APIs:
+        
+        1. `/wwwapi` deal with requests from the website.
+        2. `/api` for programatic access.
+
+        ![Split](https://media.giphy.com/media/26zzkFIEP28v1vVwA/giphy.gif)
+      </section>
+      <section data-markdown>
+        ### 4. Minor bugs
+
+        Of course there were plenty of minor bugs and improvements necessary, so no worries you still are gonna have a job after the release.
+
+        ![Minor bugs](https://media.giphy.com/media/4PWnyCi17jrjzBD8qD/giphy.gif)
+      </section>
+      <section
+        data-background="https://media.giphy.com/media/jNYUeDwoUoloEswJm8/giphy.gif"
+        class="ebi-bg"
+      > 
+      <h1>Questions?</h1>
+         </section>
+
+
+      <section data-background="css/theme/ebi/bg_plants.png" class="ebi-bg">
+          <h2>Thanks!</h1>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: false,
+        controlsLayout: "edges",
+        fragments: true,
+
+        markdown: {
+          smartypants: true,
+        },
+        dependencies: [
+          { src: "plugin/markdown/marked.js" },
+          { src: "plugin/markdown/markdown.js" },
+          { src: "plugin/notes/notes.js", async: true },
+          {
+            src: "plugin/highlight/highlight.js",
+            async: true,
+            callback: function () {
+              hljs.initHighlightingOnLoad();
+            },
+          },
+        ],
+      });
+    </script>
+  </body>
+</html>
